@@ -85,11 +85,11 @@ Strategy Pattern: Utilizado para selecionar a lógica de movimentação de bebid
 Esses três padrões trabalham juntos para criar uma arquitetura flexível e escalável para sua aplicação.
 
 ## Perguntass Respostas
-1 - O que achou do teste? Grau de dificuldade, desafios encontrados, etc.
+# 1 - O que achou do teste? Grau de dificuldade, desafios encontrados, etc.
 Achei um grau médio,porém as regras de negócio estavam um tanto confusas em alguns pontos. Meu maior desafio foi conciliar minhas tarefas diárias de trabalho com esse desafio. Isso o tornoo, sem trocadilhos, bastante desafiador, principalmente porque tentei entregar uma API mais robusta que o normal e com um código com mais qualidade.
 
-2 -  Alteraria algo no teste para analisar alguma outra habilidade?
+# 2 -  Alteraria algo no teste para analisar alguma outra habilidade?
 Se houvesse tempo ágil, talvez trabalhar com estrutura de filas.
 
-3 - Entende que testes unitários são necessários para garantia da qualidade do código entregue?
+# 3 - Entende que testes unitários são necessários para garantia da qualidade do código entregue?
 Entendo e sou totalmente favorável de sua utilização, pois além de nos ensinar a pegar o hábito de escrevê-los, nos permite mapear pequenas partes de um código uilizando os testes unitários, assim como os de integração cobrindo de ponta a ponta uma transação, desde a chamada da controller até a persistência na base de dados.
