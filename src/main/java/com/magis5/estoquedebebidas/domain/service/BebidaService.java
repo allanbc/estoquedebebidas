@@ -1,17 +1,17 @@
 package com.magis5.estoquedebebidas.domain.service;
 
-import com.magis5.estoquedebebidas.application.dto.BebidaDTO;
+import com.magis5.estoquedebebidas.data.models.BebidaDTO;
 import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
-import com.magis5.estoquedebebidas.domain.exception.BebidaNotFoundException;
-import com.magis5.estoquedebebidas.domain.model.Bebida;
-import com.magis5.estoquedebebidas.domain.model.Secao;
+import com.magis5.estoquedebebidas.core.exceptions.BebidaNotFoundException;
+import com.magis5.estoquedebebidas.domain.entities.Bebida;
+import com.magis5.estoquedebebidas.domain.entities.Secao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +36,7 @@ public class BebidaService {
 
     @Transactional
     public Bebida criarBebida(BebidaDTO bebidaDTO) {
-
+        Assert.isTrue(bebidaDTO.validaPayload(), "Erro de validação: Campos obrigatórios (nome, tipoBebida, secaoId) não foram informados!");
         LOG.info("Cadastrando uma bebida: {}", bebidaDTO);
 
         Bebida bebida = converterDtoToEntity(bebidaDTO);
@@ -54,9 +54,13 @@ public class BebidaService {
     }
 
     public Bebida getByBebidaId(Long bebidaId) {
+        Assert.notNull(bebidaId, "Não foi informado ID na URL");
         LOG.info("Buscando de seção pelo id {}", bebidaId);
         return Optional.ofNullable(manager.find(Bebida.class, bebidaId))
-                .orElseThrow(() -> new BebidaNotFoundException(bebidaId));
+                .orElseThrow(() -> {
+                    LOG.warn("Autor não encontrado");
+                    return new BebidaNotFoundException(bebidaId);
+                });
     }
 
     public List<Bebida> listarBebidasPorSecao(Long secaoId) {

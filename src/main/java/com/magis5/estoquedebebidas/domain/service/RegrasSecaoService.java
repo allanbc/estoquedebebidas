@@ -1,7 +1,7 @@
 package com.magis5.estoquedebebidas.domain.service;
 
 import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
-import com.magis5.estoquedebebidas.domain.model.Secao;
+import com.magis5.estoquedebebidas.domain.entities.Secao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -20,13 +20,12 @@ public class RegrasSecaoService {
         this.manager = manager;
     }
 
-    public double calcularVolumeTotalEstoque(String tipo) {
+    public double calcularVolumeTotalEstoque(TipoBebida tipo) {
         TypedQuery<Secao> query = manager.createQuery(
-                "SELECT b FROM Secao c WHERE c.tipoDeBebida = :tipo", Secao.class);
-        query.setParameter("tipoDeBebida", tipo);
+                "SELECT s FROM Secao s WHERE s.tipoDeBebida = :tipo", Secao.class);
+        query.setParameter("tipo", tipo);
 
         List<Secao> secoes = query.getResultList();
-
         // Calcula o volume total usando Streams
         return secoes.stream()
                 .mapToDouble(Secao::getVolumeAtual)
@@ -35,7 +34,7 @@ public class RegrasSecaoService {
 
     public List<Secao> consultarSecoesDeArmazenamento(double volume, TipoBebida tipo) {
         TypedQuery<Secao> query = manager.createQuery(
-                "SELECT b FROM Bebida b WHERE b.tipo = :tipo", Secao.class);
+                "SELECT s FROM Secao s WHERE s.tipoDeBebida = :tipo", Secao.class);
         query.setParameter("tipo", tipo);
 
         List<Secao> secoes = query.getResultList();
@@ -46,7 +45,7 @@ public class RegrasSecaoService {
 
     public List<Secao> consultarSecoesParaVendaDeBebidas(TipoBebida tipo) {
         TypedQuery<Secao> query = manager.createQuery(
-                "SELECT b FROM Bebida b WHERE b.tipo = :tipo", Secao.class);
+                "SELECT s FROM Secao s WHERE s.tipoDeBebida = :tipo", Secao.class);
         query.setParameter("tipo", tipo);
 
         List<Secao> secoes = query.getResultList();

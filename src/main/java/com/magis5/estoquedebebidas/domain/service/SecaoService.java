@@ -1,18 +1,19 @@
 package com.magis5.estoquedebebidas.domain.service;
 
-import com.magis5.estoquedebebidas.application.dto.SecaoDTO;
-import com.magis5.estoquedebebidas.application.usecase.factory.MovimentoHistoricoStrategyFactory;
-import com.magis5.estoquedebebidas.application.usecase.strategy.MovimentacaoBebidas;
-import com.magis5.estoquedebebidas.application.usecase.strategy.MovimentoHistoricoStrategy;
+import com.magis5.estoquedebebidas.data.models.SecaoDTO;
+import com.magis5.estoquedebebidas.core.exceptions.SecaoInvalidaException;
+import com.magis5.estoquedebebidas.core.exceptions.SecaoNotFoundException;
 import com.magis5.estoquedebebidas.domain.enums.TipoMovimento;
-import com.magis5.estoquedebebidas.domain.exception.*;
-import com.magis5.estoquedebebidas.domain.model.Bebida;
-import com.magis5.estoquedebebidas.domain.model.Secao;
+import com.magis5.estoquedebebidas.domain.entities.Secao;
+import com.magis5.estoquedebebidas.domain.usecase.factory.MovimentoHistoricoStrategyFactory;
+import com.magis5.estoquedebebidas.domain.usecase.strategy.movements.MovimentacaoBebidas;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
 import java.util.Optional;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -23,14 +24,14 @@ public class SecaoService {
     @PersistenceContext
     private final EntityManager manager;
     private final BebidaService bebidaService;
-    private final MovimentoHistoricoStrategyFactory strategyFactory;
     private final MovimentacaoBebidas movimentacaoBebidas;
+    private final HistoricoService historicoService;
 
-    public SecaoService(EntityManager manager, BebidaService bebidaService, MovimentoHistoricoStrategyFactory strategyFactory, MovimentacaoBebidas movimentacaoBebidas) {
+    public SecaoService(EntityManager manager, BebidaService bebidaService, MovimentacaoBebidas movimentacaoBebidas, HistoricoService historicoService) {
         this.manager = manager;
         this.bebidaService = bebidaService;
-        this.strategyFactory = strategyFactory;
         this.movimentacaoBebidas = movimentacaoBebidas;
+        this.historicoService = historicoService;
     }
 
     public Secao getBySecaoId(Long secaoId) {
@@ -41,7 +42,7 @@ public class SecaoService {
     }
     @Transactional
     public Secao criarSecao(SecaoDTO secaoDTO) {
-
+        Assert.isTrue(secaoDTO.validaPayload(), "Algumas regras de cadastro não foram obedecidas!");
         if (secaoDTO.numero() <= 0) {
             throw new SecaoInvalidaException("O número da seção deve ser maior que zero.");
         }
@@ -70,23 +71,23 @@ public class SecaoService {
     public void adicionarBebida(Long secaoId, Long bebidaId, String responsavel, TipoMovimento tipoMovimento, Double volume) {
         var secao = getBySecaoId(secaoId);
         var bebida = bebidaService.getByBebidaId(bebidaId);
-
-        secao.validarAdicionarBebida(bebida, secao, volume);
-
         /*
          * Aqui cada classe cuidará de um tipo específico de movimento e,
          * se o tipo não for correspondente, ela delega para o próximo na cadeia
          */
+        //Cadeia de Responsabilidade
         movimentacaoBebidas.realizarMovimento(secao, bebida, tipoMovimento, responsavel, volume);
-        atualizarHistorico(secao, bebida, tipoMovimento, responsavel, volume);
+
+        historicoService.atualizarHistorico(secao, bebida, tipoMovimento, responsavel, volume);
 
     }
-    public void atualizarHistorico(Secao secao, Bebida bebida, TipoMovimento tipoMovimento, String responsavel, Double volume) {
+    public void retirarBebida(Long secaoId, Long bebidaId, String responsavel, TipoMovimento tipoMovimento, Double volume) {
+        var secao = getBySecaoId(secaoId);
+        var bebida = bebidaService.getByBebidaId(bebidaId);
 
-        MovimentoHistoricoStrategy strategy = strategyFactory.getStrategy(tipoMovimento);
-        if (strategy == null) {
-            throw new MovimentoInvalidoException(tipoMovimento.name());
-        }
-        strategy.registrar(secao, bebida, tipoMovimento, responsavel, volume);
+        movimentacaoBebidas.realizarMovimento(secao, bebida, tipoMovimento, responsavel, volume);
+
+        historicoService.atualizarHistorico(secao, bebida, tipoMovimento, responsavel, volume);
+
     }
 }
