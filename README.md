@@ -1,62 +1,88 @@
-# **API de Gestão de Estoque de Bebidas**
+# **API de Controle de Estoque de Bebidas**
 
 
 
-## Getting started
+# Descrição
+A motivação de criação dessa API veio da necessidade e observação em vários depósitos de bebidas em que a gestão do controle de estoque é feito de maneira manual, gerando uma sério de falhas operacionais, ocasionando perdas financeiras e muito retrabalho.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+# Funcionalidades
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+- Cadastro e consulta das bebidas armazenadas em cada seção com suas respectivas queries. 
 
-## Add your files
+- Consulta do volume total no estoque por cada tipo de bebida. 
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+- Consulta dos locais disponíveis de armazenamento de um determinado volume de bebida. (calcular via algoritmo). 
 
-```
-cd existing_repo
-git remote add origin https://gitlab.com/allanbc/estoquedebebidas.git
-git branch -M main
-git push -uf origin main
-```
+- Consulta das seções disponíveis para venda de determinado tipo de bebida (calcular via algoritmo). 
 
-## Integrate with your tools
+- Cadastro de histórico de entrada e saída de bebidas em caso de venda e recebimento. 
 
-- [ ] [Set up project integrations](https://gitlab.com/allanbc/estoquedebebidas/-/settings/integrations)
+- Consulta do histórico de entradas e saídas por tipo de bebida e seção. 
+As seguintes regras devem ser respeitadas no fluxo de cadastro e cálculo: 
 
-## Collaborate with your team
+# Regras de Negócio
+- Uma seção não pode ter dois ou mais tipos diferentes de bebidas 
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+- Não há entrada ou saída de estoque sem respectivo registro no histórico. 
 
-## Test and Deploy
+- Registro deve conter horário, tipo, volume, seção e responsável pela entrada. 
 
-Use the built-in continuous integration in GitLab.
+- Uma seção não pode receber bebidas não alcoólicas se recebeu alcoólicas no mesmo dia. Ex: Seção 2 começou o dia com 50 litros de bebidas alcoólicas que foram consumidas do estoque, só poderá receber não alcoólicas no dia seguinte. 
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+- O endpoint de consulta de histórico de entrada e saída de estoque, deve retornar os resultados ordenados por data e seção, podendo alterar a ordenação via parâmetros. 
+- Para situações de erro, é necessário que a resposta da requisição seja coerente em exibir uma mensagem condizente com o erro.
+
+#
+# Tecnologias
+
+- Spring Boot
+- Java 17
+- MySQL
+- Docker
+- EntityManager
+- Swagger
+- Lombok
+- jUnit
 
 ***
 
-# Editing this README
+# Arquitetura da Aplicação
+Como já dizia o bom e conhecido Robert C. Martin, a sua arquitetura deve informar os leitores sobre o sistema e não sobre os frameworks que você usou no sistema.
+Nesse sentido eu tentei minimamente utilizar o padrão Clean Architecture usando Java, Spring mais a parte de API e acesso a dados.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+## Camadas
+- core
+- data
+- domain
 
-## Suggestions for a good README
+## Tratamento de Exceções
+Implmentei um ControllerAdvice que controla todo o fluxo de exceção, juntamente com mensagens personalizadas de acordo com o tipo do erro.
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+## Exceções personalizadas
+As seguintes exeções personalizdas foram criadas de modo que fique claro quando o erro ocorrer: `AdicionarBebidaException` `BebidaArmazenadaException` `BebidaNotFoundException` `EstoqueBebidasException` `MovimentoInvalidoException` `RemoverVolumeMaiorException` `SaidaEstoqueException` `SecaoInvalidaException` `SecaoNotFoundException` `VolumeInsuficienteException` `VolumeSecaoInvalidaException`
 
-## Name
-Choose a self-explaining name for your project.
+## Padrões Utilizados
+Foram utilizados alguns padrões de projeto para facilitar a implementação das regras de negócio e para uma possível mamutenção futura. Então, tudo que foi aplicado, tornou o código mais manutenível e desacoplado. Os padrões utilizados foram:
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+- DTO: Data Transfer Object é um padrão de arquitetura de objetos qe agregam e encapsulam dados para transferência. Ele foi utilizado na API em alguns pontos para representar algumas informações.
+- Builder: Nos permite construir objetos complexos de forma organizada e legível, evitando a confusão causada por muitos construtores e métodos setters.
+
+- Factory method: Atua como uma fábrica que escolhe que escolhe qual estratégia de movimentação de bebidas deve ser usada com base no tipo de movimento. O Factory Pattern também está presente n implementação da classe MovimentoHistoricoStrategyFactory. O padrão Factory é utilizado para encapsular a lógica de criação de objetos, delegando a responsabilidade de instanciar as classes corretas com base em algum critério (neste caso, o `TipoMovimento`). O Factory Pattern foi utilizado para encapsular a lógica de escolha da estratégia de movimentação aproprieada e a retorna com base no parâmetro TipoMovimento(como ENTRADA ou SAIDA). Dessa maneira, se houver novos tipos no futuro, será possível facilmente adicionar novas estratégias sem alterar o código existente, apenas registrando a nova implementação no `Map`.
+
+- Chain of Responsibility: Esse padrão nos permite que criemos uma cadeia de responsabilidades onde cada manipulador pode processar uma solicitação ou passar para o próximo na cadeia. Isso está implementado  nas classes `AbstractHandler ` e `ValidacaoEstoquehandler`.
+- Strategy: Fornece uma maneira de escolher dinamicamente entre várias implementações de uma interface de acordo com a situação. Nessa API em específico o padrão `Strategy` está sendo utilizado para a lógica de movimentação de bebidas e validações, como em `MovimentoHistoricoStrategyFactory`.
+
+#**Em Resumo:**
+**Interface** `HandlerEstoque`, `AbstractHandler`, e `ValidacaoEstoquehandler` fazem parte do padrão **Chain of Responsibility**. Eles permitem que encadeemos múltiplos manipuladores de lógica de negócio.
+
+**Movimento de Bebidas e Validações (Strategy)**: O Strategy Pattern está presente na forma como escolhemos a estratégia de movimentação de bebidas (MovimentoHistoricoStrategyFactory) e na forma como lida com validações específicas de entrada ou saída de bebidas (ValidacaoEstoquehandler, ValidacaoSaidaHandler).
+
+#Resumo de Padrões na Implementação:
+
+**Chain of Responsibility**: Usado para criar uma cadeia de validações e processamento, como na AbstractHandler e seus subclasses.
+Strategy Pattern: Utilizado para selecionar a lógica de movimentação de bebidas e as validações de entrada ou saída.
+**Factory Pattern**: A classe MovimentoHistoricoStrategyFactory é uma implementação clássica do Factory Pattern, escolhendo e retornando a estratégia correta de movimentação de acordo com o tipo de operação (TipoMovimento).
+Esses três padrões trabalham juntos para criar uma arquitetura flexível e escalável para sua aplicação.
 
 ## Badges
 On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
