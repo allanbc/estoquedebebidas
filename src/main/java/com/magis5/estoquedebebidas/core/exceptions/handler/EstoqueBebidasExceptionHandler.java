@@ -15,6 +15,7 @@ import org.springframework.web.bind.support.WebExchangeBindException;
 
 import java.net.BindException;
 import java.util.HashMap;
+import java.util.NoSuchElementException;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -100,6 +101,16 @@ public class EstoqueBebidasExceptionHandler {
                         .errorCode("internal_server_error")
                         .message(exception.getMessage())
                         .build());
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<ErrorResponse> handleNoSuchElementException(NoSuchElementException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .httpStatusCode(HttpStatus.NOT_FOUND.value())
+                .errorCode("not_found")
+                .message("Resource not found")
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
     private <T> void messageLog (T exception) {
         if (LOG.isWarnEnabled()) {
