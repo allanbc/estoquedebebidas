@@ -9,6 +9,7 @@ import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
 import com.magis5.estoquedebebidas.domain.service.BebidaService;
 import com.magis5.estoquedebebidas.domain.service.SecaoService;
 import com.magis5.estoquedebebidas.domain.util.ExistsIdValueValidator;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -53,6 +54,9 @@ class BebidasControllerTest {
 
     private  ObjectMapper objectMapper;
 
+    @Autowired
+    private EntityManager manager;
+
     @MockBean
     private ExistsIdValueValidator existsIdValueValidator;
 
@@ -66,7 +70,7 @@ class BebidasControllerTest {
                     return Secao.builder()
                             .id(1L)
                             .numSecao(dto.numero())
-                            .tipoDeBebida(dto.tipoBebida())
+                            .tipoBebida(dto.tipoBebida())
                             .capacidadeMaxima(dto.capacidadeMaxima())
                             .volumeAtual(dto.volumeAtual())
                             .build();
@@ -93,7 +97,6 @@ class BebidasControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print()
                 ).andReturn().getResponse();
-
         assertEquals(HttpStatus.CREATED.value(), response.getStatus());
     }
 
@@ -108,7 +111,7 @@ class BebidasControllerTest {
         var secao = Secao.builder()
                 .id(1L)
                 .numSecao(secaoDTO.numero())
-                .tipoDeBebida(secaoDTO.tipoBebida())
+                .tipoBebida(secaoDTO.tipoBebida())
                 .capacidadeMaxima(secaoDTO.capacidadeMaxima())
                 .volumeAtual(secaoDTO.volumeAtual())
                 .build();
