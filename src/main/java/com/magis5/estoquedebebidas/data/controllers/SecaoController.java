@@ -3,7 +3,7 @@ import com.magis5.estoquedebebidas.data.models.MovimentoBebidasRequest;
 import com.magis5.estoquedebebidas.data.models.SecaoDTO;
 import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
-import com.magis5.estoquedebebidas.domain.service.RegrasSecaoService;
+import com.magis5.estoquedebebidas.domain.service.TiposConsultaSecaoService;
 import com.magis5.estoquedebebidas.domain.service.SecaoService;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
@@ -16,15 +16,15 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/secoes")
+@RequestMapping("api/secoes")
 public class SecaoController {
 
     private final SecaoService secaoService;
-    private final RegrasSecaoService regrasSecaoService;
+    private final TiposConsultaSecaoService tiposConsultaSecaoService;
 
-    public SecaoController(SecaoService secaoService, RegrasSecaoService regrasSecaoService) {
+    public SecaoController(SecaoService secaoService, TiposConsultaSecaoService tiposConsultaSecaoService) {
         this.secaoService = secaoService;
-        this.regrasSecaoService = regrasSecaoService;
+        this.tiposConsultaSecaoService = tiposConsultaSecaoService;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -59,16 +59,16 @@ public class SecaoController {
 
     @GetMapping("/volume-total-estoque")
     public ResponseEntity<Double> calcularVolumeTotalEstoque(@RequestParam TipoBebida tipoBebida) {
-        return ResponseEntity.ok(regrasSecaoService.calcularVolumeTotalEstoque(tipoBebida));
+        return ResponseEntity.ok(tiposConsultaSecaoService.calcularVolumeTotalEstoque(tipoBebida));
     }
 
     @GetMapping("/consultar-secoes-de-armazenamento")
     public ResponseEntity<List<Secao>> consultarSecoesDeArmazenamento(@RequestParam double volume, @RequestParam TipoBebida tipo) {
-        return ResponseEntity.ok(regrasSecaoService.consultarSecoesDeArmazenamento(volume, tipo));
+        return ResponseEntity.ok(tiposConsultaSecaoService.consultarSecoesDeArmazenamento(volume, tipo));
     }
 
     @GetMapping("/consultar-secoes-para-venda")
     public ResponseEntity<List<Secao>> consultarSecoesParaVendaDeBebidas(@RequestParam TipoBebida tipo) {
-        return ResponseEntity.ok(regrasSecaoService.consultarSecoesParaVendaDeBebidas(tipo));
+        return ResponseEntity.ok(tiposConsultaSecaoService.consultarSecoesParaVendaDeBebidas(tipo));
     }
 }
