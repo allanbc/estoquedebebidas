@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class RegrasSecaoService {
+public class TiposConsultaSecaoService {
 
     @PersistenceContext
     private final EntityManager manager;
 
-    public RegrasSecaoService(EntityManager manager) {
+    public TiposConsultaSecaoService(EntityManager manager) {
         this.manager = manager;
     }
 
