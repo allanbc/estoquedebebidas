@@ -8,6 +8,7 @@ import com.magis5.estoquedebebidas.domain.entities.Secao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -16,6 +17,8 @@ public class SaidaMovimentoStrategy implements MovimentoHistoricoStrategy {
 
     @PersistenceContext
     EntityManager manager;
+
+    @Transactional
     @Override
     public void registrar(Secao secao, Bebida bebida, TipoMovimento tipoMovimento, String responsavel, Double volume) {
         Secao pesquisaSecao = Optional.ofNullable(manager.find(Secao.class, secao.getId()))
