@@ -15,17 +15,17 @@ public class Secao {
     private Long id;
     private int numSecao;
     @Enumerated(EnumType.STRING)
-    private TipoBebida tipoDeBebida;
+    private TipoBebida tipoBebida;
     private double capacidadeMaxima;
     private double volumeAtual;
 
     public Secao() {
     }
 
-    public Secao(Long id, int numSecao, TipoBebida tipoDeBebida, double capacidadeMaxima, double volumeAtual) {
+    public Secao(Long id, int numSecao, TipoBebida tipoBebida, double capacidadeMaxima, double volumeAtual) {
         this.id = id;
         this.numSecao = numSecao;
-        this.tipoDeBebida = tipoDeBebida;
+        this.tipoBebida = tipoBebida;
         this.capacidadeMaxima = capacidadeMaxima;
         this.volumeAtual = volumeAtual;
     }
@@ -33,7 +33,7 @@ public class Secao {
         return Secao.builder()
                 .id(secao.id)
                 .numSecao(secao.numSecao)
-                .tipoDeBebida(secao.tipoDeBebida)
+                .tipoBebida(secao.tipoBebida)
                 .capacidadeMaxima(secao.capacidadeMaxima)
                 .volumeAtual(secao.volumeAtual)
                 .build();
@@ -44,12 +44,12 @@ public class Secao {
     }
 
     public boolean armazenarVolume(String tipo, double volume) {
-        return tipoDeBebida.name().equals(tipo)
+        return tipoBebida.name().equals(tipo)
                 && volumeAtual + volume <= getCapacidadeMaxima();
     }
 
     public double getCapacidadeMaxima() {
-        return tipoDeBebida.equals(TipoBebida.ALCOOLICA) ? 500.0 : 400.0;
+        return tipoBebida.equals(TipoBebida.ALCOOLICA) ? 500.0 : 400.0;
     }
 
     //Todo terminar implementação
