@@ -18,7 +18,6 @@ public record BebidaDTO(
         @NotNull(message = "O tipo de bebida é obrigatório")
         String tipoBebida,
         @Valid
-        @ExistsId(domainClass = Secao.class, fieldName = "id")
         Long secaoId
 ) {
     public BebidaDTO(BebidaDTO bebidaDTO) {
