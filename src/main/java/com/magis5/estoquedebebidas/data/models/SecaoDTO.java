@@ -11,7 +11,7 @@ public record SecaoDTO(
         ) {
 
         public SecaoDTO(Secao secao) {
-                this(secao.getNumSecao(), secao.getTipoDeBebida(), secao.getCapacidadeMaxima(), secao.getVolumeAtual());
+                this(secao.getNumSecao(), secao.getTipoBebida(), secao.getCapacidadeMaxima(), secao.getVolumeAtual());
         }
 
         public boolean validaPayload() {
