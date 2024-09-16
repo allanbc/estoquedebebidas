@@ -54,18 +54,22 @@ public class Secao {
 
     //Todo terminar implementação
     public boolean removerVolumeMaiorQueZero(String tipo, double volume) {
-        return tipoDeBebida.name().equals(tipo)
-                && volumeAtual + volume > 0;
+        if(volumeAtual - volume <= 0 || volume <= 0) {
+            throw new RemoverVolumeMaiorException(volume);
+        } else {
+            this.volumeAtual -= volume;
+            return false;
+        }
     }
 
     //Todo terminar implementação
     public boolean removerVolumeMaiorQueAtual(Bebida bebida, Secao secao, double volume) {
         if (volume > volumeAtual) {
             throw new RemoverVolumeMaiorException(volume, bebida, secao);
+        } else {
+            this.volumeAtual -= volume;
+            return false;
         }
-        this.volumeAtual -= volume;
-
-        return true;
     }
 
     /*
