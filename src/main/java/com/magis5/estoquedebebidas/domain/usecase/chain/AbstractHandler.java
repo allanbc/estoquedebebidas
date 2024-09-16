@@ -16,5 +16,5 @@ public abstract class AbstractHandler {
         }
     }
 
-    public abstract void handle(Bebida bebidaDTO, double volume, String responsavel, TipoMovimento tipoMovimento);
+    public abstract void handle(Bebida bebida, double volume, String responsavel, TipoMovimento tipoMovimento);
 }
