@@ -53,7 +53,7 @@ public class SecaoController {
     }
 
     @GetMapping(value="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Secao> obterSecao(@PathVariable Long id) {
+    public ResponseEntity<Secao> getSecaoById(@PathVariable Long id) {
         return ResponseEntity.ok(secaoService.getBySecaoId(id));
     }
 

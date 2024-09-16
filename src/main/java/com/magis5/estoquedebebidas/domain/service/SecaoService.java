@@ -5,7 +5,6 @@ import com.magis5.estoquedebebidas.core.exceptions.SecaoInvalidaException;
 import com.magis5.estoquedebebidas.core.exceptions.SecaoNotFoundException;
 import com.magis5.estoquedebebidas.domain.enums.TipoMovimento;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
-import com.magis5.estoquedebebidas.domain.usecase.factory.MovimentoHistoricoStrategyFactory;
 import com.magis5.estoquedebebidas.domain.usecase.strategy.movements.MovimentacaoBebidas;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -52,7 +51,7 @@ public class SecaoService {
 
         var secao = Secao.builder()
                 .numSecao(secaoDTO.numero())
-                .tipoDeBebida(secaoDTO.tipoBebida())
+                .tipoBebida(secaoDTO.tipoBebida())
                 .capacidadeMaxima(secaoDTO.capacidadeMaxima())
                 .volumeAtual(secaoDTO.volumeAtual())
                 .build();
