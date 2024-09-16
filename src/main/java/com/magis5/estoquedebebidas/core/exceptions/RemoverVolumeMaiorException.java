@@ -10,6 +10,10 @@ public class RemoverVolumeMaiorException extends EstoqueBebidasException {
     }
 
     public RemoverVolumeMaiorException(double volume, Bebida bebida, Secao secao) {
-        super(HttpStatus.UNPROCESSABLE_ENTITY, "bebida_removida_erro", String.format("Não é possível remover o volume $d da bebida %s na seção %s", volume, bebida, secao.getNumSecao()));
+        super(HttpStatus.UNPROCESSABLE_ENTITY, "bebida_removida_erro", String.format("Não é possível remover o volume %2f da bebida %s na seção %d", volume, bebida, secao.getNumSecao()));
+    }
+
+    public RemoverVolumeMaiorException(double volume) {
+        super(HttpStatus.UNPROCESSABLE_ENTITY, "bebida_removida_erro", String.format("Não é possível remover o volume %2f", volume));
     }
 }
