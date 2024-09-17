@@ -84,6 +84,14 @@ Strategy Pattern: Utilizado para selecionar a lógica de movimentação de bebid
 **Factory Pattern**: A classe MovimentoHistoricoStrategyFactory é uma implementação clássica do Factory Pattern, escolhendo e retornando a estratégia correta de movimentação de acordo com o tipo de operação (TipoMovimento).
 Esses três padrões trabalham juntos para criar uma arquitetura flexível e escalável para sua aplicação.
 
+# Execução via Docker
+A aplicação pode ser executada da maneira tradicional, baixando do git, importando o projeto na IDE de preferência e rodando a aplicação. Não esquecendo de ter de configurar um banco de dados.
+Mas, existe uma maneira mais interesante e adequada que é a utilização de contêniers via Docker para empacotar, buildar e subir a aplicação.
+Primeiramente precisamos ter um arquivo Dockefile na raiz do projeto, conforme pode ser observado nos arquivos do projeto com as configurações base para ele ser executado.
+Tendo isso em mãos, no cmd da raiz do projeto, entre os seguintes comandos: 
+- `docker run -p 8080:8080 estoque-bebidas-app`
+- 
+
 ## Perguntass Respostas
 ## 1 - O que achou do teste? Grau de dificuldade, desafios encontrados, etc.
 Achei um grau médio,porém as regras de negócio estavam um tanto confusas em alguns pontos. Meu maior desafio foi conciliar minhas tarefas diárias de trabalho com esse desafio. Isso o tornoo, sem trocadilhos, bastante desafiador, principalmente porque tentei entregar uma API mais robusta que o normal e com um código com mais qualidade.
