@@ -9,7 +9,6 @@ import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
 import com.magis5.estoquedebebidas.domain.service.BebidaService;
 import com.magis5.estoquedebebidas.domain.service.SecaoService;
 import com.magis5.estoquedebebidas.domain.util.ExistsIdValueValidator;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -53,9 +52,6 @@ class BebidasControllerTest {
     private BebidaService bebidaService;
 
     private  ObjectMapper objectMapper;
-
-    @Autowired
-    private EntityManager manager;
 
     @MockBean
     private ExistsIdValueValidator existsIdValueValidator;
