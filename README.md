@@ -48,7 +48,7 @@ As seguintes regras devem ser respeitadas no fluxo de cadastro e cálculo:
 
 # Arquitetura da Aplicação
 Como já dizia o bom e conhecido Robert C. Martin, a sua arquitetura deve informar os leitores sobre o sistema e não sobre os frameworks que você usou no sistema.
-Nesse sentido eu tentei minimamente utilizar o padrão Clean Architecture usando Java, Spring mais a parte de API e acesso a dados.
+Nesse sentido eu tentei minimamente utilizar o padrão Clean Architecture usando Java, Spring, mais a parte de API e acesso a dados.
 
 ## Camadas
 - core
@@ -56,7 +56,7 @@ Nesse sentido eu tentei minimamente utilizar o padrão Clean Architecture usando
 - domain
 
 ## Tratamento de Exceções
-Implmentei um ControllerAdvice que controla todo o fluxo de exceção, juntamente com mensagens personalizadas de acordo com o tipo do erro.
+Implementei um ControllerAdvice que controla todo o fluxo de exceção, juntamente com mensagens personalizadas de acordo com o tipo do erro.
 
 ## Exceções personalizadas
 As seguintes exeções personalizdas foram criadas de modo que fique claro quando o erro ocorrer: `AdicionarBebidaException` `BebidaArmazenadaException` `BebidaNotFoundException` `EstoqueBebidasException` `MovimentoInvalidoException` `RemoverVolumeMaiorException` `SaidaEstoqueException` `SecaoInvalidaException` `SecaoNotFoundException` `VolumeInsuficienteException` `VolumeSecaoInvalidaException`
@@ -64,12 +64,12 @@ As seguintes exeções personalizdas foram criadas de modo que fique claro quand
 ## Padrões Utilizados
 Foram utilizados alguns padrões de projeto para facilitar a implementação das regras de negócio e para uma possível mamutenção futura. Então, tudo que foi aplicado, tornou o código mais manutenível e desacoplado. Os padrões utilizados foram:
 
-- DTO: Data Transfer Object é um padrão de arquitetura de objetos qe agregam e encapsulam dados para transferência. Ele foi utilizado na API em alguns pontos para representar algumas informações.
+- `DTO`: Data Transfer Object é um padrão de arquitetura de objetos qe agregam e encapsulam dados para transferência. Ele foi utilizado na API em alguns pontos para representar algumas informações.
 - Builder: Nos permite construir objetos complexos de forma organizada e legível, evitando a confusão causada por muitos construtores e métodos setters.
 
-- Factory method: Atua como uma fábrica que escolhe que escolhe qual estratégia de movimentação de bebidas deve ser usada com base no tipo de movimento. O Factory Pattern também está presente n implementação da classe MovimentoHistoricoStrategyFactory. O padrão Factory é utilizado para encapsular a lógica de criação de objetos, delegando a responsabilidade de instanciar as classes corretas com base em algum critério (neste caso, o `TipoMovimento`). O Factory Pattern foi utilizado para encapsular a lógica de escolha da estratégia de movimentação aproprieada e a retorna com base no parâmetro TipoMovimento(como ENTRADA ou SAIDA). Dessa maneira, se houver novos tipos no futuro, será possível facilmente adicionar novas estratégias sem alterar o código existente, apenas registrando a nova implementação no `Map`.
+- `Factory method`: Atua como uma fábrica que escolhe que escolhe qual estratégia de movimentação de bebidas deve ser usada com base no tipo de movimento. O Factory Pattern também está presente n implementação da classe **MovimentoHistoricoStrategyFactor**y. O padrão Factory é utilizado para encapsular a lógica de criação de objetos, delegando a responsabilidade de instanciar as classes corretas com base em algum critério (neste caso, o `TipoMovimento`). O Factory Pattern foi utilizado para encapsular a lógica de escolha da estratégia de movimentação aproprieada e a retorna com base no parâmetro TipoMovimento(como ENTRADA ou SAIDA). Dessa maneira, se houver novos tipos no futuro, será possível facilmente adicionar novas estratégias sem alterar o código existente, apenas registrando a nova implementação no `Map`.
 
-- Chain of Responsibility: Esse padrão nos permite que criemos uma cadeia de responsabilidades onde cada manipulador pode processar uma solicitação ou passar para o próximo na cadeia. Isso está implementado  nas classes `AbstractHandler ` e `ValidacaoEstoquehandler`.
+- `Chain of Responsibility`: Esse padrão nos permite que criemos uma cadeia de responsabilidades onde cada manipulador pode processar uma solicitação ou passar para o próximo na cadeia. Isso está implementado  nas classes `AbstractHandler ` e `ValidacaoEstoquehandler`.
 - Strategy: Fornece uma maneira de escolher dinamicamente entre várias implementações de uma interface de acordo com a situação. Nessa API em específico o padrão `Strategy` está sendo utilizado para a lógica de movimentação de bebidas e validações, como em `MovimentoHistoricoStrategyFactory`.
 
 #**Em Resumo:**
