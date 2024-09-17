@@ -25,7 +25,7 @@ public class ValidacaoEstoquehandler extends AbstractHandler {
 
         for (ValidacaoEntrada validacao : validacoes) {
             if (!validacao.validar(bebida, bebida.getTipoBebida(), secao, volume)) {
-                throw new AdicionarBebidaException(bebida.getNome());
+                throw new AdicionarBebidaException(bebida.getNome(),  validacao.getClass().getSimpleName());
             }
         }
         // Passa para o próximo handler na cadeia
