@@ -4,7 +4,6 @@ import com.magis5.estoquedebebidas.core.exceptions.RecebeBebidaAlcoolicaExceptio
 import com.magis5.estoquedebebidas.data.models.SecaoDTO;
 import com.magis5.estoquedebebidas.core.exceptions.SecaoInvalidaException;
 import com.magis5.estoquedebebidas.core.exceptions.SecaoNotFoundException;
-import com.magis5.estoquedebebidas.domain.entities.Bebida;
 import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
 import com.magis5.estoquedebebidas.domain.enums.TipoMovimento;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
