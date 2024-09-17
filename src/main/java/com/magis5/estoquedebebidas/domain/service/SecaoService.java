@@ -41,7 +41,7 @@ public class SecaoService {
     }
     @Transactional
     public Secao criarSecao(SecaoDTO secaoDTO) {
-        Assert.isTrue(secaoDTO.validaPayload(), "Algumas regras de cadastro não foram obedecidas!");
+        Assert.isTrue(!secaoDTO.validaPayload(), "Algumas regras de cadastro não foram obedecidas!");
         if (secaoDTO.numero() <= 0) {
             throw new SecaoInvalidaException("O número da seção deve ser maior que zero.");
         }
