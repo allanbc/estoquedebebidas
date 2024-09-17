@@ -5,6 +5,7 @@ import com.magis5.estoquedebebidas.core.exceptions.MovimentoInvalidoException;
 import com.magis5.estoquedebebidas.domain.entities.Bebida;
 import com.magis5.estoquedebebidas.domain.entities.Historico;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
+import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
 import com.magis5.estoquedebebidas.domain.enums.TipoMovimento;
 import com.magis5.estoquedebebidas.domain.repositories.HistoricoRepositoryCustom;
 import com.magis5.estoquedebebidas.domain.usecase.chain.AbstractHandler;
@@ -12,10 +13,17 @@ import com.magis5.estoquedebebidas.domain.usecase.chain.ValidacaoEstoquehandler;
 import com.magis5.estoquedebebidas.domain.usecase.factory.MovimentoHistoricoStrategyFactory;
 import com.magis5.estoquedebebidas.domain.usecase.strategy.movements.MovimentoHistoricoStrategy;
 import com.magis5.estoquedebebidas.domain.usecase.strategy.validations.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +37,9 @@ public class HistoricoService {
     private final HistoricoRepositoryCustom historicoRepositoryCustom;
     private final SecaoService secaoService;
     private final MovimentoHistoricoStrategyFactory strategyFactory;
+
+    @Autowired
+    private EntityManager manager;
 
 
     public HistoricoService(HistoricoRepositoryCustom historicoRepositoryCustom, @Lazy SecaoService secaoService, MovimentoHistoricoStrategyFactory strategyFactory) {
@@ -101,5 +112,28 @@ public class HistoricoService {
             throw new MovimentoInvalidoException(tipoMovimento.name());
         }
         strategy.registrar(secao, bebida, tipoMovimento, responsavel, volume);
+    }
+
+    public boolean verificarSePodeCadastrarBebidaSecao(String tipoBebida, Long secaoId) {
+        // Obter a data do início e fim do dia atual
+        LocalDateTime inicioDia = LocalDate.now().atStartOfDay();
+        LocalDateTime fimDia = inicioDia.plus(1, ChronoUnit.DAYS);
+
+        // Query para verificar se houve entrada de bebida alcoólica na seção no dia atual
+        String jpql = "SELECT COUNT(h) FROM Historico h " +
+                "JOIN h.bebida b " +
+                "WHERE h.secao.id = :secaoId " +
+                "AND b.tipoBebida = 'ALCOOLICA' " +
+                "AND h.dataHora BETWEEN :inicioDia AND :fimDia";
+
+        TypedQuery<Long> query = manager.createQuery(jpql, Long.class);
+        query.setParameter("secaoId", secaoId);
+        query.setParameter("inicioDia", inicioDia);
+        query.setParameter("fimDia", fimDia);
+
+        Long count = query.getSingleResult();
+
+        // Retorna true se não houver registros de ALCOOLICA no mesmo dia, permitindo a inserção de NAO ALCOOLICA
+        return count == 0;
     }
 }

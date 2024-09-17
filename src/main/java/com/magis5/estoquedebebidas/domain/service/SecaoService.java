@@ -1,8 +1,11 @@
 package com.magis5.estoquedebebidas.domain.service;
 
+import com.magis5.estoquedebebidas.core.exceptions.RecebeBebidaAlcoolicaException;
 import com.magis5.estoquedebebidas.data.models.SecaoDTO;
 import com.magis5.estoquedebebidas.core.exceptions.SecaoInvalidaException;
 import com.magis5.estoquedebebidas.core.exceptions.SecaoNotFoundException;
+import com.magis5.estoquedebebidas.domain.entities.Bebida;
+import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
 import com.magis5.estoquedebebidas.domain.enums.TipoMovimento;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
 import com.magis5.estoquedebebidas.domain.usecase.strategy.movements.MovimentacaoBebidas;
@@ -13,6 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -48,6 +54,10 @@ public class SecaoService {
         if (secaoDTO.capacidadeMaxima() < secaoDTO.volumeAtual()) {
             throw new SecaoInvalidaException("A capacidade máxima não pode ser menor que o volume atual.");
         }
+        List<TipoBebida> tipos = Arrays.asList(TipoBebida.values());
+        if(!tipos.contains(secaoDTO.tipoBebida())) {
+            throw new SecaoInvalidaException("Uma seção não pode ter dois ou mais tipos diferentes de bebidas que não seja 'ALCOOLICA e NAO ALCOOLICA");
+        }
 
         var secao = Secao.builder()
                 .numSecao(secaoDTO.numero())
@@ -70,6 +80,13 @@ public class SecaoService {
     public void adicionarBebida(Long secaoId, Long bebidaId, String responsavel, TipoMovimento tipoMovimento, Double volume) {
         var secao = getBySecaoId(secaoId);
         var bebida = bebidaService.getByBebidaId(bebidaId);
+
+        boolean recebeuBebidas = historicoService.verificarSePodeCadastrarBebidaSecao(bebida.getTipoBebida().name(), secaoId);
+
+        if(!recebeuBebidas) {
+            throw new RecebeBebidaAlcoolicaException(bebida.getTipoBebida());
+        }
+
         /*
          * Aqui cada classe cuidará de um tipo específico de movimento e,
          * se o tipo não for correspondente, ela delega para o próximo na cadeia
