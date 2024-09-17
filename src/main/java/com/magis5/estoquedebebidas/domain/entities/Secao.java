@@ -52,7 +52,6 @@ public class Secao {
         return tipoBebida.equals(TipoBebida.ALCOOLICA) ? 500.0 : 400.0;
     }
 
-    //Todo terminar implementação
     public boolean removerVolumeMaiorQueZero(String tipo, double volume) {
         if(volumeAtual - volume <= 0 || volume <= 0) {
             throw new RemoverVolumeMaiorException(volume);
@@ -62,7 +61,6 @@ public class Secao {
         }
     }
 
-    //Todo terminar implementação
     public boolean removerVolumeMaiorQueAtual(Bebida bebida, Secao secao, double volume) {
         if (volume > volumeAtual && volume > secao.getCapacidadeMaxima()) {
             throw new RemoverVolumeMaiorException(volume, bebida, secao);

@@ -22,7 +22,6 @@ public class SaidaMovimentoStrategy implements MovimentoHistoricoStrategy {
     @Override
     public void registrar(Secao secao, Bebida bebida, TipoMovimento tipoMovimento, String responsavel, Double volume) {
         Secao pesquisaSecao = Optional.ofNullable(manager.find(Secao.class, secao.getId()))
-//                .map(Secao::secaoBuilder)
                 .orElseThrow(() -> new SecaoNotFoundException(secao.getId()));
 
         if (pesquisaSecao != null ) {
