@@ -64,12 +64,10 @@ public class Secao {
 
     //Todo terminar implementação
     public boolean removerVolumeMaiorQueAtual(Bebida bebida, Secao secao, double volume) {
-        if (volume > volumeAtual) {
+        if (volume > volumeAtual && volume > secao.getCapacidadeMaxima()) {
             throw new RemoverVolumeMaiorException(volume, bebida, secao);
-        } else {
-            this.volumeAtual -= volume;
-            return false;
         }
+        return true;
     }
 
     /*

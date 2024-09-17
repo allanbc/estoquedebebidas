@@ -22,7 +22,7 @@ public class TiposConsultaSecaoService {
 
     public double calcularVolumeTotalEstoque(TipoBebida tipo) {
         TypedQuery<Secao> query = manager.createQuery(
-                "SELECT s FROM Secao s WHERE s.tipoDeBebida = :tipo", Secao.class);
+                "SELECT s FROM Secao s WHERE s.tipoBebida = :tipo", Secao.class);
         query.setParameter("tipo", tipo);
 
         List<Secao> secoes = query.getResultList();
@@ -34,7 +34,7 @@ public class TiposConsultaSecaoService {
 
     public List<Secao> consultarSecoesDeArmazenamento(double volume, TipoBebida tipo) {
         TypedQuery<Secao> query = manager.createQuery(
-                "SELECT s FROM Secao s WHERE s.tipoDeBebida = :tipo", Secao.class);
+                "SELECT s FROM Secao s WHERE s.tipoBebida = :tipo", Secao.class);
         query.setParameter("tipo", tipo);
 
         List<Secao> secoes = query.getResultList();
@@ -45,7 +45,7 @@ public class TiposConsultaSecaoService {
 
     public List<Secao> consultarSecoesParaVendaDeBebidas(TipoBebida tipo) {
         TypedQuery<Secao> query = manager.createQuery(
-                "SELECT s FROM Secao s WHERE s.tipoDeBebida = :tipo", Secao.class);
+                "SELECT s FROM Secao s WHERE s.tipoBebida = :tipo", Secao.class);
         query.setParameter("tipo", tipo);
 
         List<Secao> secoes = query.getResultList();
