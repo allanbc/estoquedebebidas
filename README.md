@@ -89,8 +89,10 @@ A aplicação pode ser executada da maneira tradicional, baixando do git, import
 Mas, existe uma maneira mais interesante e adequada que é a utilização de contêniers via Docker para empacotar, buildar e subir a aplicação.
 Primeiramente precisamos ter um arquivo Dockefile na raiz do projeto, conforme pode ser observado nos arquivos do projeto com as configurações base para ele ser executado.
 Tendo isso em mãos, no cmd da raiz do projeto, entre os seguintes comandos: 
-- `docker run -p 8080:8080 estoque-bebidas-app`
-- 
+- `docker build -t estoque-bebidas-app .`-> com esse comando a gente específica o nome da imagem e o ponto "." indica para Docker build aonde vai estar o arquivo Dockerfile
+- `docker images` -> verifica a imagem criada
+- `docker run -p 8080:8080 estoque-bebidas-app`-> O conteiner vai rodar numa aplicação spring boot na porta 8080:8080
+- `docker-compose up` -> rode esse comando caso queira que suba no conteiner a aplicação junto com o banco de dados
 
 ## Perguntass Respostas
 ## 1 - O que achou do teste? Grau de dificuldade, desafios encontrados, etc.
