@@ -70,17 +70,17 @@ Foram utilizados alguns padrões de projeto para facilitar a implementação das
 - `Factory method`: Atua como uma fábrica que escolhe que escolhe qual estratégia de movimentação de bebidas deve ser usada com base no tipo de movimento. O Factory Pattern também está presente n implementação da classe **MovimentoHistoricoStrategyFactor**y. O padrão Factory é utilizado para encapsular a lógica de criação de objetos, delegando a responsabilidade de instanciar as classes corretas com base em algum critério (neste caso, o `TipoMovimento`). O Factory Pattern foi utilizado para encapsular a lógica de escolha da estratégia de movimentação aproprieada e a retorna com base no parâmetro TipoMovimento(como ENTRADA ou SAIDA). Dessa maneira, se houver novos tipos no futuro, será possível facilmente adicionar novas estratégias sem alterar o código existente, apenas registrando a nova implementação no `Map`.
 
 - `Chain of Responsibility`: Esse padrão nos permite que criemos uma cadeia de responsabilidades onde cada manipulador pode processar uma solicitação ou passar para o próximo na cadeia. Isso está implementado  nas classes `AbstractHandler ` e `ValidacaoEstoquehandler`.
-- Strategy: Fornece uma maneira de escolher dinamicamente entre várias implementações de uma interface de acordo com a situação. Nessa API em específico o padrão `Strategy` está sendo utilizado para a lógica de movimentação de bebidas e validações, como em `MovimentoHistoricoStrategyFactory`.
+- `Strategy`: Fornece uma maneira de escolher dinamicamente entre várias implementações de uma interface de acordo com a situação. Nessa API em específico o padrão **Strategy** está sendo utilizado para a lógica de movimentação de bebidas e validações, como em `MovimentoHistoricoStrategyFactory`.
 
 #**Em Resumo:**
 **Interface** `HandlerEstoque`, `AbstractHandler`, e `ValidacaoEstoquehandler` fazem parte do padrão **Chain of Responsibility**. Eles permitem que encadeemos múltiplos manipuladores de lógica de negócio.
 
-**Movimento de Bebidas e Validações (Strategy)**: O Strategy Pattern está presente na forma como escolhemos a estratégia de movimentação de bebidas (MovimentoHistoricoStrategyFactory) e na forma como lida com validações específicas de entrada ou saída de bebidas (ValidacaoEstoquehandler, ValidacaoSaidaHandler).
+**Movimento de Bebidas e Validações (Strategy)**: O Strategy Pattern está presente na forma como escolhemos a estratégia de movimentação de bebidas (**MovimentoHistoricoStrategyFactory**) e na forma como lida com validações específicas de entrada ou saída de bebidas (**ValidacaoEstoquehandler, ValidacaoSaidaHandler**).
 
 #Resumo de Padrões na Implementação:
 
 **Chain of Responsibility**: Usado para criar uma cadeia de validações e processamento, como na AbstractHandler e seus subclasses.
-Strategy Pattern: Utilizado para selecionar a lógica de movimentação de bebidas e as validações de entrada ou saída.
+**Strategy Pattern**: Utilizado para selecionar a lógica de movimentação de bebidas e as validações de entrada ou saída.
 **Factory Pattern**: A classe MovimentoHistoricoStrategyFactory é uma implementação clássica do Factory Pattern, escolhendo e retornando a estratégia correta de movimentação de acordo com o tipo de operação (TipoMovimento).
 Esses três padrões trabalham juntos para criar uma arquitetura flexível e escalável para sua aplicação.
 
