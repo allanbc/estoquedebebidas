@@ -68,7 +68,7 @@ class BebidasControllerTest {
                             .numSecao(dto.numero())
                             .tipoBebida(dto.tipoBebida())
                             .capacidadeMaxima(dto.capacidadeMaxima())
-                            .volumeAtual(dto.volumeAtual())
+                            .volumeAtual(dto.volume())
                             .build();
                 });
         // Simula a busca por ID
@@ -109,7 +109,7 @@ class BebidasControllerTest {
                 .numSecao(secaoDTO.numero())
                 .tipoBebida(secaoDTO.tipoBebida())
                 .capacidadeMaxima(secaoDTO.capacidadeMaxima())
-                .volumeAtual(secaoDTO.volumeAtual())
+                .volumeAtual(secaoDTO.volume())
                 .build();
         // Mockar o retorno do serviço
         Bebida bebidaMock = new Bebida(1L, "Cerveja", secao, TipoBebida.ALCOOLICA);
