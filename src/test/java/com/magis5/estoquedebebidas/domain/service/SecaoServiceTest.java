@@ -2,22 +2,15 @@ package com.magis5.estoquedebebidas.domain.service;
 
 import com.magis5.estoquedebebidas.core.exceptions.SecaoInvalidaException;
 import com.magis5.estoquedebebidas.data.models.SecaoDTO;
-import com.magis5.estoquedebebidas.domain.entities.Bebida;
-import com.magis5.estoquedebebidas.domain.entities.Secao;
 import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
-import com.magis5.estoquedebebidas.domain.enums.TipoMovimento;
-import com.magis5.estoquedebebidas.domain.usecase.strategy.movements.MovimentacaoBebidas;
+import com.magis5.estoquedebebidas.domain.usecase.chains.implementations.MovimentacaoBebidas;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
-import static org.hamcrest.CoreMatchers.any;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
