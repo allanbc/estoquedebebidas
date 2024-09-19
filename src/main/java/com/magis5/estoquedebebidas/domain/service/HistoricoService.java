@@ -72,7 +72,7 @@ public class HistoricoService {
     }
 
     public void atualizarHistorico(Secao secao, Bebida bebida, MovimentoBebidasRequest request) {
-        AbstractHandler validacaoHandler = getAbstractHandler(request.getTipoMovimento());
+        AbstractHandler validacaoHandler = getAbstractHandler(request.tipoMovimento());
 
         validacaoHandler.setNext(null);
 
@@ -108,9 +108,9 @@ public class HistoricoService {
 
     public void atualizar(Secao secao, Bebida bebida, MovimentoBebidasRequest request) {
 
-        MovimentoHistoricoStrategy strategy = strategyFactory.getStrategy(request.getTipoMovimento());
+        MovimentoHistoricoStrategy strategy = strategyFactory.getStrategy(request.tipoMovimento());
         if (strategy == null) {
-            throw new MovimentoInvalidoException(request.getTipoMovimento().name());
+            throw new MovimentoInvalidoException(request.tipoMovimento().name());
         }
         strategy.registrar(secao, bebida, request);
     }

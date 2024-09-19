@@ -62,9 +62,9 @@ public class HistoricoRepositoryCustomImpl implements HistoricoRepositoryCustom 
         Historico historico = Historico.builder()
                 .secao(pesquisaSecao)
                 .bebida(bebida)
-                .volume(request.getVolume())
-                .tipoMovimento(request.getTipoMovimento())
-                .responsavel(request.getResponsavel())
+                .volume(request.volume())
+                .tipoMovimento(request.tipoMovimento())
+                .responsavel(request.responsavel())
                 .build();
 
         manager.persist(historico);

@@ -32,9 +32,9 @@ public class SaidaMovimentoStrategy implements MovimentoHistoricoStrategy {
         Secao pesquisaSecao = Optional.ofNullable(manager.find(Secao.class, secao.getId()))
                 .orElseThrow(() -> new SecaoNotFoundException(secao.getId()));
 
-        if (pesquisaSecao != null && pesquisaSecao.getVolumeAtual() - request.getVolume() >= 0 ) {
+        if (pesquisaSecao != null && pesquisaSecao.getVolumeAtual() - request.volume() >= 0 ) {
             // Atualiza o estoque
-            pesquisaSecao.setVolumeAtual(pesquisaSecao.getVolumeAtual() - request.getVolume());
+            pesquisaSecao.setVolumeAtual(pesquisaSecao.getVolumeAtual() - request.volume());
             // Adiciona ao histórico
             historicoRepositoryCustom.atualizarHistorico(pesquisaSecao, secao, bebida, request);
         } else {

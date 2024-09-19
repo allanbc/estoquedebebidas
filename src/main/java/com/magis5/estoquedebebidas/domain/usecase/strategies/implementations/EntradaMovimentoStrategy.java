@@ -31,9 +31,9 @@ public class EntradaMovimentoStrategy implements MovimentoHistoricoStrategy {
         Secao pesquisaSecao = Optional.ofNullable(manager.find(Secao.class, secao.getId()))
                 .orElseThrow(() -> new SecaoNotFoundException(secao.getId()));
 
-        if (pesquisaSecao != null && (secao.getVolumeAtual() + request.getVolume() <= secao.getCapacidadeMaxima())) {
+        if (pesquisaSecao != null && (secao.getVolumeAtual() + request.volume() <= secao.getCapacidadeMaxima())) {
             // Atualiza o estoque
-            pesquisaSecao.setVolumeAtual(pesquisaSecao.getVolumeAtual() + request.getVolume());
+            pesquisaSecao.setVolumeAtual(pesquisaSecao.getVolumeAtual() + request.volume());
             historicoRepositoryCustom.atualizarHistorico(pesquisaSecao, secao, bebida, request);
         } else {
             throw new VolumeSecaoInvalidaException(secao.getId());
