@@ -8,6 +8,7 @@ import com.magis5.estoquedebebidas.core.exceptions.SecaoNotFoundException;
 import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
 import com.magis5.estoquedebebidas.domain.usecase.chains.implementations.MovimentacaoBebidas;
+import com.magis5.estoquedebebidas.domain.validators.implementations.SecaoValidadorChain;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;
@@ -45,24 +46,25 @@ public class SecaoService {
     }
     @Transactional
     public Secao criarSecao(SecaoDTO secaoDTO) {
-        Assert.isTrue(!secaoDTO.validaPayload(), "Algumas regras de cadastro não foram obedecidas!");
-        if (secaoDTO.numero() <= 0) {
-            throw new SecaoInvalidaException("O número da seção deve ser maior que zero.");
-        }
-        double capacidade = secaoDTO.tipoBebida().equals(TipoBebida.ALCOOLICA) ? 500.0 : 400.0;
-        if (secaoDTO.capacidadeMaxima() < secaoDTO.volumeAtual() || (secaoDTO.capacidadeMaxima() > capacidade)) {
-            throw new SecaoInvalidaException("A capacidade máxima não pode ser menor que o volume atual nem maior que a capacidade de armazenamento da seção para o tipo de bebida ", secaoDTO.tipoBebida().name());
-        }
-        List<TipoBebida> tipos = Arrays.asList(TipoBebida.values());
-        if(!tipos.contains(secaoDTO.tipoBebida())) {
-            throw new SecaoInvalidaException("Uma seção não pode ter dois ou mais tipos diferentes de bebidas que não seja 'ALCOOLICA e NAO ALCOOLICA");
+        /*
+            Início do uso da cadeia de validadores através da instância da classe SecaoValidadorChain.
+            Cada validador é responsável por uma única verificação
+            Adicionar ou remover mais validadores não será mais um problema
+            Se um objeto (validador) não conseguir lidar com a entrada (neste caso, o SecaoDTO),
+            ele passa a responsabilidade para o próximo objeto da cadeia.
+         */
+        SecaoValidadorChain validatorChain = new SecaoValidadorChain();
+        try {
+            validatorChain.validate(secaoDTO);
+        } catch (SecaoInvalidaException e) {
+            throw  new IllegalArgumentException("Houve um erro em uma ou mais regras de validação");
         }
 
         var secao = Secao.builder()
                 .numSecao(secaoDTO.numero())
                 .tipoBebida(secaoDTO.tipoBebida())
                 .capacidadeMaxima(secaoDTO.capacidadeMaxima())
-                .volumeAtual(secaoDTO.volumeAtual())
+                .volumeAtual(secaoDTO.volume())
                 .build();
 
          manager.persist(secao);
