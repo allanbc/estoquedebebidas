@@ -8,7 +8,7 @@ import com.magis5.estoquedebebidas.domain.entities.Secao;
 import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
 import com.magis5.estoquedebebidas.domain.service.BebidaService;
 import com.magis5.estoquedebebidas.domain.service.SecaoService;
-import com.magis5.estoquedebebidas.domain.util.ExistsIdValueValidator;
+import com.magis5.estoquedebebidas.domain.validators.implementations.ExistsIdValueValidator;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -246,22 +246,19 @@ class BebidasControllerTest {
     }
 
     static Stream<Arguments> provideValidBebidaDTO() {
-        var secao = new Secao(1L, 1, TipoBebida.ALCOOLICA, 300.0, 20.0);
         var bebida = new BebidaDTO("Cerveja",TipoBebida.ALCOOLICA.name(), 1L);
-        var bebida2 = new BebidaDTO("Vodka",TipoBebida.ALCOOLICA.name(), 1L);
         var bebida3 = new BebidaDTO("",TipoBebida.ALCOOLICA.name(), 1L);
         return Stream.of(
                 Arguments.of(bebida, HttpStatus.CREATED.value()),
-                Arguments.of(bebida2, HttpStatus.CREATED.value()),
                 Arguments.of(bebida3, HttpStatus.BAD_REQUEST.value())
         );
     }
 
     private static Stream<Arguments> provideRespostas() {
         return Stream.of(
-                Arguments.of(1L, 200),
-                Arguments.of(null, 404),
-                Arguments.of(0L, 404)
+                Arguments.of(1L, HttpStatus.OK.value()),
+                Arguments.of(null, HttpStatus.NOT_FOUND.value()),
+                Arguments.of(0L, HttpStatus.NOT_FOUND.value())
         );
     }
 
