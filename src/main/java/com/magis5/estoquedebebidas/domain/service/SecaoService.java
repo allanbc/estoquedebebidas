@@ -5,7 +5,6 @@ import com.magis5.estoquedebebidas.data.models.MovimentoBebidasRequest;
 import com.magis5.estoquedebebidas.data.models.SecaoDTO;
 import com.magis5.estoquedebebidas.core.exceptions.SecaoInvalidaException;
 import com.magis5.estoquedebebidas.core.exceptions.SecaoNotFoundException;
-import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
 import com.magis5.estoquedebebidas.domain.usecase.chains.implementations.MovimentacaoBebidas;
 import com.magis5.estoquedebebidas.domain.validators.implementations.SecaoValidadorChain;
@@ -14,10 +13,6 @@ import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import static org.slf4j.LoggerFactory.getLogger;
 
