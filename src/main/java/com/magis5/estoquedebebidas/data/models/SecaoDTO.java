@@ -7,7 +7,7 @@ public record SecaoDTO(
         int numero,
         TipoBebida tipoBebida,
         double capacidadeMaxima,
-        double volumeAtual
+        double volume
         ) {
 
         public SecaoDTO(Secao secao) {
@@ -15,6 +15,6 @@ public record SecaoDTO(
         }
 
         public boolean validaPayload() {
-                return tipoBebida == null && volumeAtual <= 0 && capacidadeMaxima > volumeAtual && numero > 0;
+                return tipoBebida == null && volume <= 0 && capacidadeMaxima > volume && numero > 0;
         }
 }
