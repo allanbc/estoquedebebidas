@@ -67,13 +67,6 @@ public class Secao {
         }
         return true;
     }
-
-    /*
-    * Todo implementar a regra "Uma seção não pode ter dois ou mais tipos diferentes de bebidas"
-     * Todo implementar a regra "Uma seção não pode receber bebidas não alcoólicas se recebeu alcoólicas no mesmo dia.
-     * Ex: Seção 2 começou o dia com 50 litros de bebidas alcoólicas que foram consumidas do estoque,
-     * só poderá receber não alcoólicas no dia seguinte."
-     */
 }
 
 
