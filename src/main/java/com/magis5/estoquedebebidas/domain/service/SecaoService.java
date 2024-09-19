@@ -57,7 +57,7 @@ public class SecaoService {
         try {
             validatorChain.validate(secaoDTO);
         } catch (SecaoInvalidaException e) {
-            throw  new IllegalArgumentException("Houve um erro em uma ou mais regras de validação");
+            throw  new SecaoInvalidaException("Houve um erro em uma ou mais regras de validação");
         }
 
         var secao = Secao.builder()
