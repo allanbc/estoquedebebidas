@@ -5,12 +5,14 @@ import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.text.DecimalFormat;
 
 @Entity
 @Getter
 @Builder
+@Setter
 public class Secao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
