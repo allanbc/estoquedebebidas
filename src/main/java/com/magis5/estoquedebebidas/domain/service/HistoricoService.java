@@ -2,28 +2,29 @@ package com.magis5.estoquedebebidas.domain.service;
 
 import com.magis5.estoquedebebidas.data.models.HistoricoDTO;
 import com.magis5.estoquedebebidas.core.exceptions.MovimentoInvalidoException;
+import com.magis5.estoquedebebidas.data.models.MovimentoBebidasRequest;
 import com.magis5.estoquedebebidas.domain.entities.Bebida;
 import com.magis5.estoquedebebidas.domain.entities.Historico;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
-import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
 import com.magis5.estoquedebebidas.domain.enums.TipoMovimento;
 import com.magis5.estoquedebebidas.domain.repositories.HistoricoRepositoryCustom;
-import com.magis5.estoquedebebidas.domain.usecase.chain.AbstractHandler;
-import com.magis5.estoquedebebidas.domain.usecase.chain.ValidacaoEstoquehandler;
-import com.magis5.estoquedebebidas.domain.usecase.factory.MovimentoHistoricoStrategyFactory;
-import com.magis5.estoquedebebidas.domain.usecase.strategy.movements.MovimentoHistoricoStrategy;
-import com.magis5.estoquedebebidas.domain.usecase.strategy.validations.*;
+import com.magis5.estoquedebebidas.domain.usecase.chains.ValidacaoEntrada;
+import com.magis5.estoquedebebidas.domain.usecase.chains.ValidacaoSaida;
+import com.magis5.estoquedebebidas.domain.usecase.strategies.implementations.ValidacaoEntradaTipoBebida;
+import com.magis5.estoquedebebidas.domain.usecase.strategies.implementations.ValidacaoEntradaVolumeEstoque;
+import com.magis5.estoquedebebidas.domain.validators.implementations.ValidacaoSaidaHandler;
+import com.magis5.estoquedebebidas.domain.usecase.strategies.implementations.ValidacaoSaidaVolumeMaiorQAtual;
+import com.magis5.estoquedebebidas.domain.usecase.strategies.implementations.ValidarSaidaVolumeMaiorQZero;
+import com.magis5.estoquedebebidas.domain.validators.implementations.AbstractHandler;
+import com.magis5.estoquedebebidas.domain.validators.implementations.ValidacaoEntradaHandler;
+import com.magis5.estoquedebebidas.domain.usecase.factories.MovimentoHistoricoStrategyFactory;
+import com.magis5.estoquedebebidas.domain.usecase.strategies.interfaces.MovimentoHistoricoStrategy;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -70,15 +71,15 @@ public class HistoricoService {
                 .orElse(true);
     }
 
-    public void atualizarHistorico(Secao secao, Bebida bebida, TipoMovimento tipoMovimento, String responsavel, Double volume) {
-        AbstractHandler validacaoHandler = getAbstractHandler(tipoMovimento);
+    public void atualizarHistorico(Secao secao, Bebida bebida, MovimentoBebidasRequest request) {
+        AbstractHandler validacaoHandler = getAbstractHandler(request.getTipoMovimento());
 
         validacaoHandler.setNext(null);
 
         // Inicia a cadeia de manipulação
-        validacaoHandler.handle(bebida, volume, responsavel, tipoMovimento );
+        validacaoHandler.handle(bebida, request );
 
-        atualizar(secao, bebida, tipoMovimento, responsavel, volume);
+        atualizar(secao, bebida, request);
 
     }
 
@@ -100,40 +101,21 @@ public class HistoricoService {
             validacaoHandler = new ValidacaoSaidaHandler(validacoesSaida, secaoService);
         } else {
             List<ValidacaoEntrada> validacoesEntrada = Arrays.asList(new ValidacaoEntradaVolumeEstoque(), new ValidacaoEntradaTipoBebida());
-            validacaoHandler = new ValidacaoEstoquehandler(validacoesEntrada, secaoService);
+            validacaoHandler = new ValidacaoEntradaHandler(validacoesEntrada, secaoService);
         }
         return validacaoHandler;
     }
 
-    public void atualizar(Secao secao, Bebida bebida, TipoMovimento tipoMovimento, String responsavel, Double volume) {
+    public void atualizar(Secao secao, Bebida bebida, MovimentoBebidasRequest request) {
 
-        MovimentoHistoricoStrategy strategy = strategyFactory.getStrategy(tipoMovimento);
+        MovimentoHistoricoStrategy strategy = strategyFactory.getStrategy(request.getTipoMovimento());
         if (strategy == null) {
-            throw new MovimentoInvalidoException(tipoMovimento.name());
+            throw new MovimentoInvalidoException(request.getTipoMovimento().name());
         }
-        strategy.registrar(secao, bebida, tipoMovimento, responsavel, volume);
+        strategy.registrar(secao, bebida, request);
     }
 
     public boolean verificarSePodeCadastrarBebidaSecao(String tipoBebida, Long secaoId) {
-        // Obter a data do início e fim do dia atual
-        LocalDateTime inicioDia = LocalDate.now().atStartOfDay();
-        LocalDateTime fimDia = inicioDia.plus(1, ChronoUnit.DAYS);
-
-        // Query para verificar se houve entrada de bebida alcoólica na seção no dia atual
-        String jpql = "SELECT COUNT(h) FROM Historico h " +
-                "JOIN h.bebida b " +
-                "WHERE h.secao.id = :secaoId " +
-                "AND b.tipoBebida = 'ALCOOLICA' " +
-                "AND h.dataHora BETWEEN :inicioDia AND :fimDia";
-
-        TypedQuery<Long> query = manager.createQuery(jpql, Long.class);
-        query.setParameter("secaoId", secaoId);
-        query.setParameter("inicioDia", inicioDia);
-        query.setParameter("fimDia", fimDia);
-
-        Long count = query.getSingleResult();
-
-        // Retorna true se não houver registros de ALCOOLICA no mesmo dia, permitindo a inserção de NAO ALCOOLICA
-        return count == 0;
+        return historicoRepositoryCustom.verificarSePodeCadastrarBebidaSecao(tipoBebida, secaoId);
     }
 }
