@@ -23,8 +23,8 @@ public class SaidaMovimentoHandlerChain implements MovimentoHandlerChain {
      */
     @Override
     public void handle(Secao secao, Bebida bebida, MovimentoBebidasRequest request) {
-        if (request.getTipoMovimento() == TipoMovimento.SAIDA) {
-            System.out.println("Registrando saída: " + bebida.getNome() + ", Volume: " + new DecimalFormat("#,##0.0").format(request.getVolume()));
+        if (request.tipoMovimento() == TipoMovimento.SAIDA) {
+            System.out.println("Registrando saída: " + bebida.getNome() + ", Volume: " + new DecimalFormat("#,##0.0").format(request.volume()));
         } else if (nextChain != null) {
             nextChain.handle(secao, bebida, request);
         }

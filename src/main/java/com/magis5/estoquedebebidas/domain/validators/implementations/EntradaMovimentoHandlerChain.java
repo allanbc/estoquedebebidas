@@ -28,8 +28,8 @@ public class EntradaMovimentoHandlerChain implements MovimentoHandlerChain {
      */
     @Override
     public void handle(Secao secao, Bebida bebida, MovimentoBebidasRequest request) {
-        if(request.getTipoMovimento() == TipoMovimento.ENTRADA) {
-            LOG.info(String.format("Registrando entrada: %s, Volume: %s", bebida.getNome(), new DecimalFormat("#,##0.0").format(request.getVolume())));
+        if(request.tipoMovimento() == TipoMovimento.ENTRADA) {
+            LOG.info(String.format("Registrando entrada: %s, Volume: %s", bebida.getNome(), new DecimalFormat("#,##0.0").format(request.volume())));
         } else if(nextChain != null) {
             nextChain.handle(secao, bebida, request);
         }

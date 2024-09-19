@@ -24,7 +24,7 @@ public class ValidacaoEntradaHandler extends AbstractHandler {
         Secao secao = obterSecao(bebida.getSecao().getId());
 
         for (ValidacaoEntrada validacao : validacoes) {
-            if (!validacao.validar(bebida, bebida.getTipoBebida(), secao, request.getVolume())) {
+            if (!validacao.validar(bebida, bebida.getTipoBebida(), secao, request.volume())) {
                 throw new AdicionarBebidaException(bebida.getNome(),  validacao.getClass().getSimpleName());
             }
         }

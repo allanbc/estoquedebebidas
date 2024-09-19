@@ -6,7 +6,6 @@ import com.magis5.estoquedebebidas.domain.entities.Bebida;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
 import com.magis5.estoquedebebidas.domain.service.SecaoService;
 import com.magis5.estoquedebebidas.domain.usecase.chains.ValidacaoSaida;
-import com.magis5.estoquedebebidas.domain.validators.implementations.AbstractHandler;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class ValidacaoSaidaHandler extends AbstractHandler {
         Secao secao = obterSecao(bebida.getSecao().getId());
 
         for (ValidacaoSaida validacao : validacoes) {
-            if (!validacao.validar(bebida, bebida.getTipoBebida(), secao, request.getVolume())) {
+            if (!validacao.validar(bebida, bebida.getTipoBebida(), secao, request.volume())) {
                 throw new SaidaEstoqueException(bebida.getNome());
             }
         }
