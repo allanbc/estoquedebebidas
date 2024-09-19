@@ -41,14 +41,14 @@ public class SecaoController {
     @PostMapping(value="/adicionarbebida/{secaoId}/{bebidaId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> adicionarBebida(@PathVariable("secaoId") Long secaoId, @PathVariable("bebidaId") Long bebidaId,
                                                 @Valid @RequestBody MovimentoBebidasRequest request ) {
-        secaoService.adicionarBebida(secaoId, bebidaId, request.getResponsavel(), request.getTipoMovimento(), request.getVolume());
+        secaoService.adicionarBebida(secaoId, bebidaId, request);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping(value="/removerbebida/{secaoId}/{bebidaId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> removerBebida(@PathVariable("secaoId") Long secaoId, @PathVariable("bebidaId") Long bebidaId,
                                                 @Valid @RequestBody MovimentoBebidasRequest request ) {
-        secaoService.retirarBebida(secaoId, bebidaId, request.getResponsavel(), request.getTipoMovimento(), request.getVolume());
+        secaoService.retirarBebida(secaoId, bebidaId, request);
         return ResponseEntity.noContent().build();
     }
 

@@ -1,13 +1,13 @@
 package com.magis5.estoquedebebidas.domain.service;
 
 import com.magis5.estoquedebebidas.core.exceptions.RecebeBebidaAlcoolicaException;
+import com.magis5.estoquedebebidas.data.models.MovimentoBebidasRequest;
 import com.magis5.estoquedebebidas.data.models.SecaoDTO;
 import com.magis5.estoquedebebidas.core.exceptions.SecaoInvalidaException;
 import com.magis5.estoquedebebidas.core.exceptions.SecaoNotFoundException;
 import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
-import com.magis5.estoquedebebidas.domain.enums.TipoMovimento;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
-import com.magis5.estoquedebebidas.domain.usecase.strategy.movements.MovimentacaoBebidas;
+import com.magis5.estoquedebebidas.domain.usecase.chains.implementations.MovimentacaoBebidas;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;
@@ -49,8 +49,9 @@ public class SecaoService {
         if (secaoDTO.numero() <= 0) {
             throw new SecaoInvalidaException("O número da seção deve ser maior que zero.");
         }
-        if (secaoDTO.capacidadeMaxima() < secaoDTO.volumeAtual()) {
-            throw new SecaoInvalidaException("A capacidade máxima não pode ser menor que o volume atual.");
+        double capacidade = secaoDTO.tipoBebida().equals(TipoBebida.ALCOOLICA) ? 500.0 : 400.0;
+        if (secaoDTO.capacidadeMaxima() < secaoDTO.volumeAtual() || (secaoDTO.capacidadeMaxima() > capacidade)) {
+            throw new SecaoInvalidaException("A capacidade máxima não pode ser menor que o volume atual nem maior que a capacidade de armazenamento da seção para o tipo de bebida ", secaoDTO.tipoBebida().name());
         }
         List<TipoBebida> tipos = Arrays.asList(TipoBebida.values());
         if(!tipos.contains(secaoDTO.tipoBebida())) {
@@ -71,11 +72,9 @@ public class SecaoService {
     /**
      * @param secaoId indica o identificador do produto, ou seja, em qual seção a bebida está sendo registrada
      * @param bebidaId o id do produto propriamente dito
-     * @param tipoMovimento se é de ENTRADA ou SAÍDA
-     * @param responsavel a pessoa que registra na seção a bebida que entrou no depósito
-     * @param volume a quantidade de bebidas armazenadas no depósito por seção
+     * @param request dto
      */
-    public void adicionarBebida(Long secaoId, Long bebidaId, String responsavel, TipoMovimento tipoMovimento, Double volume) {
+    public void adicionarBebida(Long secaoId, Long bebidaId, MovimentoBebidasRequest request) {
         var secao = getBySecaoId(secaoId);
         var bebida = bebidaService.getByBebidaId(bebidaId);
 
@@ -90,18 +89,18 @@ public class SecaoService {
          * se o tipo não for correspondente, ela delega para o próximo na cadeia
          */
         //Cadeia de Responsabilidade
-        movimentacaoBebidas.realizarMovimento(secao, bebida, tipoMovimento, responsavel, volume);
+        movimentacaoBebidas.realizarMovimento(secao, bebida, request);
 
-        historicoService.atualizarHistorico(secao, bebida, tipoMovimento, responsavel, volume);
+        historicoService.atualizarHistorico(secao, bebida, request);
 
-    }
-    public void retirarBebida(Long secaoId, Long bebidaId, String responsavel, TipoMovimento tipoMovimento, Double volume) {
+    }//String responsavel, TipoMovimento tipoMovimento, Double volume - request.getResponsavel(), request.getTipoMovimento(), request.getVolume()
+    public void retirarBebida(Long secaoId, Long bebidaId, MovimentoBebidasRequest request) {
         var secao = getBySecaoId(secaoId);
         var bebida = bebidaService.getByBebidaId(bebidaId);
 
-        movimentacaoBebidas.realizarMovimento(secao, bebida, tipoMovimento, responsavel, volume);
+        movimentacaoBebidas.realizarMovimento(secao, bebida, request);
 
-        historicoService.atualizarHistorico(secao, bebida, tipoMovimento, responsavel, volume);
+        historicoService.atualizarHistorico(secao, bebida, request);
 
     }
 }
