@@ -94,7 +94,7 @@ Tendo isso em mãos, no cmd da raiz do projeto, entre os seguintes comandos:
 
 ## Perguntass Respostas
 ## 1 - O que achou do teste? Grau de dificuldade, desafios encontrados, etc.
-Achei um grau médio,porém as regras de negócio estavam um tanto confusas em alguns pontos. Meu maior desafio foi conciliar minhas tarefas diárias de trabalho com esse desafio. Isso o tornoo, sem trocadilhos, bastante desafiador, principalmente porque tentei entregar uma API mais robusta que o normal e com um código com mais qualidade.
+Achei um grau médio,porém as regras de negócio estavam um tanto confusas em alguns pontos. Meu maior desafio foi conciliar minhas tarefas diárias de trabalho com esse desafio. Isso o tornou, sem trocadilhos, bastante desafiador, principalmente porque tentei entregar uma API mais robusta que o normal e com um código com mais qualidade.
 
 ## 2 -  Alteraria algo no teste para analisar alguma outra habilidade?
 Se houvesse tempo ágil, talvez trabalhar com estrutura de filas.
