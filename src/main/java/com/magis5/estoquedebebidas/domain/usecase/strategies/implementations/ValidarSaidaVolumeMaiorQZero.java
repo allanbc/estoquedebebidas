@@ -8,7 +8,7 @@ import com.magis5.estoquedebebidas.domain.usecase.chains.ValidacaoSaida;
 public class ValidarSaidaVolumeMaiorQZero implements ValidacaoSaida {
     @Override
     public boolean validar(Bebida bebida, TipoBebida tipoBebida, Secao secao, double volume) {
-        var maiorQZero = secao.removerVolumeMaiorQueZero(tipoBebida.name(), volume);
+        var maiorQZero = secao.removerVolumeMaiorQueZero(tipoBebida.name(), volume, secao);
         var maiorQAtual = secao.removerVolumeMaiorQueAtual(bebida, secao, volume);
         return maiorQZero || maiorQAtual;
     }

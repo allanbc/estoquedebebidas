@@ -32,7 +32,7 @@ public class SaidaMovimentoStrategy implements MovimentoHistoricoStrategy {
         Secao pesquisaSecao = Optional.ofNullable(manager.find(Secao.class, secao.getId()))
                 .orElseThrow(() -> new SecaoNotFoundException(secao.getId()));
 
-        if (pesquisaSecao != null ) {
+        if (pesquisaSecao != null && pesquisaSecao.getVolumeAtual() - request.getVolume() >= 0 ) {
             // Atualiza o estoque
             pesquisaSecao.setVolumeAtual(pesquisaSecao.getVolumeAtual() - request.getVolume());
             // Adiciona ao histórico

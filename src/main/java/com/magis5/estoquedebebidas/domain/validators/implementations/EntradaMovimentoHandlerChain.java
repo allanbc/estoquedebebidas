@@ -7,6 +7,8 @@ import com.magis5.estoquedebebidas.domain.entities.Secao;
 import com.magis5.estoquedebebidas.domain.validators.interfaces.MovimentoHandlerChain;
 import org.slf4j.Logger;
 
+import java.text.DecimalFormat;
+
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class EntradaMovimentoHandlerChain implements MovimentoHandlerChain {
@@ -27,7 +29,7 @@ public class EntradaMovimentoHandlerChain implements MovimentoHandlerChain {
     @Override
     public void handle(Secao secao, Bebida bebida, MovimentoBebidasRequest request) {
         if(request.getTipoMovimento() == TipoMovimento.ENTRADA) {
-            LOG.info(String.format("Registrando entrada: %S, Volume: %2f", bebida.getNome(), request.getVolume()));
+            LOG.info(String.format("Registrando entrada: %s, Volume: %s", bebida.getNome(), new DecimalFormat("#,##0.0").format(request.getVolume())));
         } else if(nextChain != null) {
             nextChain.handle(secao, bebida, request);
         }

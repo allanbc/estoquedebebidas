@@ -6,6 +6,8 @@ import com.magis5.estoquedebebidas.domain.entities.Bebida;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
 import com.magis5.estoquedebebidas.domain.validators.interfaces.MovimentoHandlerChain;
 
+import java.text.DecimalFormat;
+
 public class SaidaMovimentoHandlerChain implements MovimentoHandlerChain {
 
     private MovimentoHandlerChain nextChain;
@@ -22,7 +24,7 @@ public class SaidaMovimentoHandlerChain implements MovimentoHandlerChain {
     @Override
     public void handle(Secao secao, Bebida bebida, MovimentoBebidasRequest request) {
         if (request.getTipoMovimento() == TipoMovimento.SAIDA) {
-            System.out.println("Registrando saída: " + bebida.getNome() + ", Volume: " + request.getVolume());
+            System.out.println("Registrando saída: " + bebida.getNome() + ", Volume: " + new DecimalFormat("#,##0.0").format(request.getVolume()));
         } else if (nextChain != null) {
             nextChain.handle(secao, bebida, request);
         }
