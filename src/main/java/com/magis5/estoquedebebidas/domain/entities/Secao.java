@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.text.DecimalFormat;
+
 @Entity
 @Getter
 @Builder
@@ -52,9 +54,9 @@ public class Secao {
         return tipoBebida.equals(TipoBebida.ALCOOLICA) ? 500.0 : 400.0;
     }
 
-    public boolean removerVolumeMaiorQueZero(String tipo, double volume) {
+    public boolean removerVolumeMaiorQueZero(String tipo, double volume, Secao secao) {
         if(volumeAtual - volume <= 0 || volume <= 0) {
-            throw new RemoverVolumeMaiorException(volume);
+            throw new RemoverVolumeMaiorException(new DecimalFormat("#,##0.0").format(volume), secao);
         } else {
             this.volumeAtual -= volume;
             return false;
@@ -63,7 +65,7 @@ public class Secao {
 
     public boolean removerVolumeMaiorQueAtual(Bebida bebida, Secao secao, double volume) {
         if (volume > volumeAtual && volume > secao.getCapacidadeMaxima()) {
-            throw new RemoverVolumeMaiorException(volume, bebida, secao);
+            throw new RemoverVolumeMaiorException(new DecimalFormat("#,##0.0").format(volume), bebida, secao);
         }
         return true;
     }
