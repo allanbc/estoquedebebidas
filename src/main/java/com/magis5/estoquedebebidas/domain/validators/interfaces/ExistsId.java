@@ -1,5 +1,6 @@
-package com.magis5.estoquedebebidas.domain.util;
+package com.magis5.estoquedebebidas.domain.validators.interfaces;
 
+import com.magis5.estoquedebebidas.domain.validators.implementations.ExistsIdValueValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

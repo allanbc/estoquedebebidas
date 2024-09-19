@@ -1,9 +1,9 @@
-package com.magis5.estoquedebebidas.domain.usecase.factory;
+package com.magis5.estoquedebebidas.domain.usecase.factories;
 
 import com.magis5.estoquedebebidas.domain.enums.TipoMovimento;
-import com.magis5.estoquedebebidas.domain.usecase.strategy.movements.EntradaMovimentoStrategy;
-import com.magis5.estoquedebebidas.domain.usecase.strategy.movements.MovimentoHistoricoStrategy;
-import com.magis5.estoquedebebidas.domain.usecase.strategy.movements.SaidaMovimentoStrategy;
+import com.magis5.estoquedebebidas.domain.usecase.strategies.implementations.EntradaMovimentoStrategy;
+import com.magis5.estoquedebebidas.domain.usecase.strategies.interfaces.MovimentoHistoricoStrategy;
+import com.magis5.estoquedebebidas.domain.usecase.strategies.implementations.SaidaMovimentoStrategy;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

@@ -1,12 +1,14 @@
-package com.magis5.estoquedebebidas.domain.usecase.strategy.validations;
+package com.magis5.estoquedebebidas.domain.usecase.strategies.implementations;
 
 import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
 import com.magis5.estoquedebebidas.domain.entities.Bebida;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
+import com.magis5.estoquedebebidas.domain.usecase.chains.ValidacaoEntrada;
 
-public class ValidacaoEntradaTipoBebida implements ValidacaoEntrada {
+public class ValidacaoEntradaVolumeEstoque implements ValidacaoEntrada {
+
     @Override
     public boolean validar(Bebida bebida, TipoBebida tipoBebida, Secao secao, double volume) {
-        return secao.armazenarVolume(tipoBebida.name(), volume);
+        return secao.getVolumeAtual() >= volume;
     }
 }

@@ -1,11 +1,11 @@
-package com.magis5.estoquedebebidas.domain.usecase.strategy.movements;
+package com.magis5.estoquedebebidas.domain.usecase.chains.implementations;
 
-import com.magis5.estoquedebebidas.domain.enums.TipoMovimento;
+import com.magis5.estoquedebebidas.data.models.MovimentoBebidasRequest;
 import com.magis5.estoquedebebidas.domain.entities.Bebida;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
-import com.magis5.estoquedebebidas.domain.usecase.chain.EntradaMovimentoHandlerChain;
-import com.magis5.estoquedebebidas.domain.usecase.chain.MovimentoHandlerChain;
-import com.magis5.estoquedebebidas.domain.usecase.chain.SaidaMovimentoHandlerChain;
+import com.magis5.estoquedebebidas.domain.validators.implementations.EntradaMovimentoHandlerChain;
+import com.magis5.estoquedebebidas.domain.validators.interfaces.MovimentoHandlerChain;
+import com.magis5.estoquedebebidas.domain.validators.implementations.SaidaMovimentoHandlerChain;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,12 +33,9 @@ public class MovimentacaoBebidas {
     /**
      * @param secao indica em qual seção a bebida está sendo registrada
      * @param bebida o produto propriamente dito
-     * @param tipoMovimento se é de ENTRADA ou SAÍDA
-     * @param responsavel a pessoa que registra na seção a bebida que entrou no depósito
-     * @param volume a quantidade de bebidas armazenadas no depósito por seção
+     * @param request dto
      */
-    public void realizarMovimento(Secao secao, Bebida bebida, TipoMovimento tipoMovimento,
-                                  String responsavel, Double volume) {
-        chain.handle(secao, bebida, tipoMovimento, responsavel, volume);
+    public void realizarMovimento(Secao secao, Bebida bebida, MovimentoBebidasRequest request) {
+        chain.handle(secao, bebida, request);
     }
 }

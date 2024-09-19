@@ -1,4 +1,4 @@
-package com.magis5.estoquedebebidas.domain.usecase.strategy.validations;
+package com.magis5.estoquedebebidas.domain.usecase.chains;
 
 import com.magis5.estoquedebebidas.domain.entities.Bebida;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
