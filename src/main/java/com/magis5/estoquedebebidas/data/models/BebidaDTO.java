@@ -2,8 +2,7 @@ package com.magis5.estoquedebebidas.data.models;
 
 import com.magis5.estoquedebebidas.domain.entities.Bebida;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
-import com.magis5.estoquedebebidas.domain.util.ExistsId;
-import com.magis5.estoquedebebidas.domain.util.UniqueValue;
+import com.magis5.estoquedebebidas.domain.validators.interfaces.UniqueValue;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
