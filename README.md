@@ -72,12 +72,10 @@ Foram utilizados alguns padrões de projeto para facilitar a implementação das
 - `Chain of Responsibility`: Esse padrão nos permite que criemos uma cadeia de responsabilidades onde cada manipulador pode processar uma solicitação ou passar para o próximo na cadeia. Isso está implementado  nas classes `AbstractHandler ` e `ValidacaoEstoquehandler`.
 - `Strategy`: Fornece uma maneira de escolher dinamicamente entre várias implementações de uma interface de acordo com a situação. Nessa API em específico o padrão **Strategy** está sendo utilizado para a lógica de movimentação de bebidas e validações, como em `MovimentoHistoricoStrategyFactory`.
 
-#**Em Resumo:**
-**Interface** `HandlerEstoque`, `AbstractHandler`, e `ValidacaoEstoquehandler` fazem parte do padrão **Chain of Responsibility**. Eles permitem que encadeemos múltiplos manipuladores de lógica de negócio.
+## Resumo de Padrões na Implementação:
+As Interfaces `HandlerEstoque`, `AbstractHandler`, e `ValidacaoEstoquehandler` fazem parte do padrão **Chain of Responsibility**. Eles permitem que encadeemos múltiplos manipuladores de lógica de negócio.
 
 **Movimento de Bebidas e Validações (Strategy)**: O Strategy Pattern está presente na forma como escolhemos a estratégia de movimentação de bebidas (**MovimentoHistoricoStrategyFactory**) e na forma como lida com validações específicas de entrada ou saída de bebidas (**ValidacaoEstoquehandler, ValidacaoSaidaHandler**).
-
-#Resumo de Padrões na Implementação:
 
 **Chain of Responsibility**: Usado para criar uma cadeia de validações e processamento, como na AbstractHandler e seus subclasses.
 **Strategy Pattern**: Utilizado para selecionar a lógica de movimentação de bebidas e as validações de entrada ou saída.
