@@ -100,7 +100,7 @@ class BebidasControllerTest {
     @ParameterizedTest
     @ArgumentsSource(JsonBebidasArgumentsProvider.class)
     @DisplayName("Test Create Bebida Integrada - Valid Payload")
-    void deveCriarBebidaIntegradaComSecaoComSucessoERetornarStatus201Ou400(BebidaDTO payloadBebida, int expectedStatus) throws Exception {
+    void deveCriarBebidaComSecaoComSucessoERetornarStatus201Ou400(BebidaDTO payloadBebida, int expectedStatus) throws Exception {
         //Arranje
         String payload = objectMapper.writeValueAsString(payloadBebida);
         var secaoDTO = new SecaoDTO(1, TipoBebida.ALCOOLICA, 300.0, 20.0);
@@ -158,24 +158,22 @@ class BebidasControllerTest {
     @MethodSource("provideValidBebidaDTO")
     void deveCriarBebidaComSucesso(BebidaDTO bebidaDTO, int expectedStatus) throws Exception {
         // Arrange
-//        var bebidaDTO = new BebidaDTO("Cerveja",TipoBebida.ALCOOLICA.name(), 1L);
-
         Secao secaoMock = mock(Secao.class);
-        when(secaoMock.getId()).thenReturn(1L); // Mockando o ID da secao
+        when(secaoMock.getId()).thenReturn(1L); //
 
         Bebida bebidaMock = mock(Bebida.class);
-        when(bebidaMock.getId()).thenReturn(1L); // Mockando o retorno do ID após a criação
+        when(bebidaMock.getId()).thenReturn(1L);
 
         // Mockando o serviço para buscar a seção
         when(secaoService.getBySecaoId(1L)).thenReturn(secaoMock);
 
-        when(bebidaService.criarBebida(any(BebidaDTO.class))).thenReturn(bebidaMock); // Mockando o comportamento do serviço
+        when(bebidaService.criarBebida(any(BebidaDTO.class))).thenReturn(bebidaMock);
 
         // Act
         var response = mockMvc.perform(
                 post("/api/bebidas")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(bebidaDTO)) // Serializando o DTO para JSON
+                        .content(new ObjectMapper().writeValueAsString(bebidaDTO))
         ).andReturn().getResponse();
 
         // Assert

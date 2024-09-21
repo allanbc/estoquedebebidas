@@ -83,8 +83,6 @@ class SecaoServiceTest {
     @Test
     @DisplayName("Consulta integrada com base de dados de uma Seção pelo ID da Seção")
     void deveRetornarAsInformacoesDaSecaoPeloId() {
-        // Cria uma nova seção e persiste no banco de dados
-
         // Recupera a seção pelo ID
         Secao buscaSecao = service.getBySecaoId(1L);
 

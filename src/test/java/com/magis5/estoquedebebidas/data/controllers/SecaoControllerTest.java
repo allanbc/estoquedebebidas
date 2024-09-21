@@ -230,6 +230,31 @@ class SecaoControllerTest {
     }
 
     @Test
+    @DisplayName("Test consulta seções para venda de bebidas com parâmetros válidos")
+    void testConsultarSecoesParaVendaDeBebidas() throws Exception {
+        // Arrange
+        double capacidade = 500.0;
+        TipoBebida tipo = TipoBebida.ALCOOLICA;
+        var secaoMock = Secao.builder()
+                .tipoBebida(TipoBebida.ALCOOLICA)
+                .numSecao(1)
+                .capacidadeMaxima(capacidade)
+                .volumeAtual(200).build();
+
+        List<Secao> secoes = Collections.singletonList(secaoMock);
+
+        when(tiposConsultaSecaoService.consultarSecoesParaVendaDeBebidas(tipo)).thenReturn(secoes);
+
+        // Act
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/secoes/consultar-secoes-para-venda")
+                        .param("tipo", tipo.name())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0]").exists());
+    }
+
+    @Test
     void consultarSecoesParaVendaDeBebidas() {
     }
 
