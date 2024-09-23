@@ -1,9 +1,15 @@
 package com.magis5.estoquedebebidas.domain.service;
 
+import com.magis5.estoquedebebidas.core.exceptions.RecebeBebidaAlcoolicaException;
 import com.magis5.estoquedebebidas.core.exceptions.SecaoInvalidaException;
+import com.magis5.estoquedebebidas.core.exceptions.SecaoNotFoundException;
+import com.magis5.estoquedebebidas.data.models.BebidaDTO;
+import com.magis5.estoquedebebidas.data.models.MovimentoBebidasRequest;
 import com.magis5.estoquedebebidas.data.models.SecaoDTO;
+import com.magis5.estoquedebebidas.domain.entities.Bebida;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
 import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
+import com.magis5.estoquedebebidas.domain.enums.TipoMovimento;
 import com.magis5.estoquedebebidas.domain.usecase.chains.implementations.MovimentacaoBebidas;
 import com.magis5.estoquedebebidas.domain.validators.implementations.SecaoValidadorChain;
 import jakarta.persistence.EntityManager;
@@ -11,9 +17,11 @@ import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -29,8 +37,15 @@ class SecaoServiceTest {
     @Mock
     private EntityManager entityManager;
 
-    @Mock
+    @Spy
+    @InjectMocks
     private BebidaService bebidaService;
+
+    @Autowired
+    private BebidaService bebidaServiceIntegrated;
+
+    @InjectMocks
+    private BebidaService bebidaService2;
 
     @Mock
     private MovimentacaoBebidas movimentacaoBebidas;
@@ -38,9 +53,14 @@ class SecaoServiceTest {
     @Mock
     private HistoricoService historicoService;
 
+    @Autowired
+    private HistoricoService histService;
+
+
     @Mock
     private TiposConsultaSecaoService tiposConsultaSecaoService;
 
+    @Spy
     @InjectMocks
     private SecaoService secaoService;
 
@@ -176,5 +196,58 @@ class SecaoServiceTest {
         });
 
         assertEquals("secao inválida: Houve um erro em uma ou mais regras de validação", thrown.getMessage());
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Adiciona uma bebida na seção")
+    void testAdicionarBebidaNaSecao() {
+        // Arrange
+        Long secaoId = 1L;
+        Long bebidaId = 1L;
+
+        // Criar e persistir uma seção
+        SecaoDTO secaoDTO = new SecaoDTO(1, TipoBebida.ALCOOLICA, 500, 100.0);
+        Secao secao = new Secao();
+        secao.setId(secaoId);
+        secao.setVolumeAtual(100.0);
+        secao.setTipoBebida(TipoBebida.ALCOOLICA);
+        // Adicione os outros campos necessários e persista
+        manager.merge(secao);
+
+        // Criar e persistir uma bebida
+        BebidaDTO bebidaDTO = new BebidaDTO("Cerveja", TipoBebida.ALCOOLICA.name(), secaoId);
+        Bebida bebida = bebidaServiceIntegrated.criarBebida(bebidaDTO);
+
+        MovimentoBebidasRequest request = new MovimentoBebidasRequest("Allan", TipoMovimento.ENTRADA, 100.0);
+
+        // Act
+        service.adicionarBebida(secaoId, bebidaId, request);
+
+        // Assert
+        // Aqui você pode verificar se a bebida foi realmente adicionada à seção
+        Secao secaoAtualizada = service.getBySecaoId(secaoId);
+        assertNotNull(secaoAtualizada);
+        // Verifique os detalhes da seção e se a bebida foi adicionada corretamente
+    }
+
+    @Test
+    @DisplayName("Retorna uma exceção caso os parâmetros enviados sejam incompatíveis")
+    void testAdicionarBebida_ThrowsException() {
+        // Arrange
+        Long secaoId = 0L;
+        Long bebidaId = 2L;
+
+        when(historicoService.verificarSePodeCadastrarBebidaSecao(TipoBebida.ALCOOLICA.name(), secaoId))
+                .thenThrow(new RecebeBebidaAlcoolicaException(TipoBebida.ALCOOLICA));
+
+        MovimentoBebidasRequest request = new MovimentoBebidasRequest("Allan", TipoMovimento.ENTRADA, 100.0);
+
+        // Act & Assert
+        SecaoNotFoundException thrown = assertThrows(SecaoNotFoundException.class, () -> {
+            secaoService.adicionarBebida(secaoId, bebidaId, request);
+        });
+
+        assertEquals("Nenhuma seção encontrada com o id: "+secaoId, thrown.getMessage());
     }
 }
