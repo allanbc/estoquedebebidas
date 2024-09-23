@@ -22,6 +22,7 @@ public record HistoricoDTO(
                 .volume(historico.getVolume())
                 .dataHora(historico.getDataHora())
                 .responsavel(historico.getResponsavel())
+                .tipoMovimento(historico.getTipoMovimento())
                 .build();
     }
 }

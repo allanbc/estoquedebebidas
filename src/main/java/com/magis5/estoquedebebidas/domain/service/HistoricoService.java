@@ -50,7 +50,6 @@ public class HistoricoService {
     }
 
     public List<Historico> consultaHistoricoOrderBySecaoDataAsc(String sortField, String sortDirection, Integer numSecao, String tipoMovimento) {
-        // Recupera a lista de históricos com base na ordenação
         List<Historico> historicoList = historicoRepositoryCustom.findHistorico(sortField, sortDirection);
         return historicoList.stream()
                 .filter(h -> matchesSecao(h, numSecao))
@@ -60,15 +59,21 @@ public class HistoricoService {
     }
 
     private boolean matchesSecao(Historico historico, Integer numSecao) {
+
+        if (historico == null || historico.getSecao() == null) {
+            return false;
+        }
+
         return Optional.of(numSecao)
                 .map(secao -> secao.equals(historico.getSecao().getNumSecao()))
                 .orElse(true);
     }
 
     private boolean matchesTipoMovimento(Historico historico, String tipoMovimento) {
-        return Optional.ofNullable(tipoMovimento)
-                .map(tipo -> tipo.equals(historico.getTipoMovimento().name()))
-                .orElse(true);
+        return Optional.ofNullable(historico.getTipoMovimento())
+                .map(TipoMovimento::name)
+                .map(tipo -> tipo.equals(tipoMovimento))
+                .orElse(tipoMovimento == null);
     }
 
     public void atualizarHistorico(Secao secao, Bebida bebida, MovimentoBebidasRequest request) {
@@ -90,7 +95,7 @@ public class HistoricoService {
      *                      de validação para o movimento de Saída.
      * @return handler validado
      */
-    private AbstractHandler getAbstractHandler(TipoMovimento tipoMovimento) {
+    protected AbstractHandler getAbstractHandler(TipoMovimento tipoMovimento) {
         AbstractHandler validacaoHandler;
 
         // Lista de validações

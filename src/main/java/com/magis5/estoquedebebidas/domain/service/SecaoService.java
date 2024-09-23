@@ -90,7 +90,7 @@ public class SecaoService {
 
         historicoService.atualizarHistorico(secao, bebida, request);
 
-    }//String responsavel, TipoMovimento tipoMovimento, Double volume - request.getResponsavel(), request.getTipoMovimento(), request.getVolume()
+    }
     public void retirarBebida(Long secaoId, Long bebidaId, MovimentoBebidasRequest request) {
         var secao = getBySecaoId(secaoId);
         var bebida = bebidaService.getByBebidaId(bebidaId);
