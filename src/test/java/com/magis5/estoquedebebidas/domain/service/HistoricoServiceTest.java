@@ -1,7 +1,6 @@
 package com.magis5.estoquedebebidas.domain.service;
 
 import com.magis5.estoquedebebidas.core.exceptions.MovimentoInvalidoException;
-import com.magis5.estoquedebebidas.data.models.HistoricoDTO;
 import com.magis5.estoquedebebidas.data.models.MovimentoBebidasRequest;
 import com.magis5.estoquedebebidas.domain.entities.Bebida;
 import com.magis5.estoquedebebidas.domain.entities.Historico;
@@ -12,9 +11,7 @@ import com.magis5.estoquedebebidas.domain.usecase.factories.MovimentoHistoricoSt
 import com.magis5.estoquedebebidas.domain.usecase.strategies.interfaces.MovimentoHistoricoStrategy;
 import com.magis5.estoquedebebidas.domain.validators.implementations.ValidacaoEntradaHandler;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
