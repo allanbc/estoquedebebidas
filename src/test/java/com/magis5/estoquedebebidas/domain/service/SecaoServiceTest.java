@@ -7,10 +7,10 @@ import com.magis5.estoquedebebidas.data.models.BebidaDTO;
 import com.magis5.estoquedebebidas.data.models.MovimentoBebidasRequest;
 import com.magis5.estoquedebebidas.data.models.SecaoDTO;
 import com.magis5.estoquedebebidas.domain.entities.Bebida;
+import com.magis5.estoquedebebidas.domain.entities.Historico;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
 import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
 import com.magis5.estoquedebebidas.domain.enums.TipoMovimento;
-import com.magis5.estoquedebebidas.domain.usecase.chains.implementations.MovimentacaoBebidas;
 import com.magis5.estoquedebebidas.domain.validators.implementations.SecaoValidadorChain;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.*;
@@ -23,6 +23,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -31,42 +33,19 @@ import static org.mockito.Mockito.*;
 @ActiveProfiles("tests")
 class SecaoServiceTest {
 
-    @Autowired
-    private EntityManager manager;
-
-    @Mock
-    private EntityManager entityManager;
-
-    @Spy
-    @InjectMocks
-    private BebidaService bebidaService;
-
-    @Autowired
-    private BebidaService bebidaServiceIntegrated;
-
-    @InjectMocks
-    private BebidaService bebidaService2;
-
-    @Mock
-    private MovimentacaoBebidas movimentacaoBebidas;
-
-    @Mock
-    private HistoricoService historicoService;
-
-    @Autowired
-    private HistoricoService histService;
-
-
-    @Mock
-    private TiposConsultaSecaoService tiposConsultaSecaoService;
-
     @Spy
     @InjectMocks
     private SecaoService secaoService;
-
     @Autowired
     private SecaoService service;
-
+    @Autowired
+    private BebidaService bebidaServiceIntegrated;
+    @Autowired
+    private EntityManager manager;
+    @Mock
+    private EntityManager entityManager;
+    @Mock
+    private HistoricoService historicoService;
     @Mock
     private SecaoValidadorChain validatorChain;
 
@@ -210,25 +189,22 @@ class SecaoServiceTest {
         SecaoDTO secaoDTO = new SecaoDTO(1, TipoBebida.ALCOOLICA, 500, 100.0);
         Secao secao = new Secao();
         secao.setId(secaoId);
-        secao.setVolumeAtual(100.0);
-        secao.setTipoBebida(TipoBebida.ALCOOLICA);
-        // Adicione os outros campos necessários e persista
+        secao.setVolumeAtual(secaoDTO.volume());
+        secao.setTipoBebida(secaoDTO.tipoBebida());
         manager.merge(secao);
 
         // Criar e persistir uma bebida
         BebidaDTO bebidaDTO = new BebidaDTO("Cerveja", TipoBebida.ALCOOLICA.name(), secaoId);
         Bebida bebida = bebidaServiceIntegrated.criarBebida(bebidaDTO);
 
-        MovimentoBebidasRequest request = new MovimentoBebidasRequest("Allan", TipoMovimento.ENTRADA, 100.0);
+        MovimentoBebidasRequest request = new MovimentoBebidasRequest("Allan", TipoMovimento.ENTRADA, 10.0);
 
         // Act
         service.adicionarBebida(secaoId, bebidaId, request);
 
         // Assert
-        // Aqui você pode verificar se a bebida foi realmente adicionada à seção
         Secao secaoAtualizada = service.getBySecaoId(secaoId);
         assertNotNull(secaoAtualizada);
-        // Verifique os detalhes da seção e se a bebida foi adicionada corretamente
     }
 
     @Test
@@ -250,4 +226,36 @@ class SecaoServiceTest {
 
         assertEquals("Nenhuma seção encontrada com o id: "+secaoId, thrown.getMessage());
     }
+
+    @Test
+    @Transactional
+    @DisplayName("Remove uma bebida da seção")
+    void testRemoverBebidaDaSecao() {
+        // Arrange
+        Long secaoId = 1L;
+        Long bebidaId = 1L;
+
+        // Criar e persistir uma seção
+        SecaoDTO secaoDTO = new SecaoDTO(1, TipoBebida.ALCOOLICA, 500, 70.0);
+        Secao secao = new Secao();
+        secao.setId(secaoId);
+        secao.setVolumeAtual(secaoDTO.volume());
+        secao.setTipoBebida(secaoDTO.tipoBebida());
+        manager.merge(secao);
+
+        // Criar e persistir uma bebida
+        BebidaDTO bebidaDTO = new BebidaDTO("Cerveja", TipoBebida.ALCOOLICA.name(), secaoId);
+        Bebida bebida = bebidaServiceIntegrated.criarBebida(bebidaDTO);
+
+        MovimentoBebidasRequest request = new MovimentoBebidasRequest("Allan", TipoMovimento.SAIDA, 10.0);
+
+        // Act
+        service.retirarBebida(secaoId, bebidaId, request);
+
+        // Assert
+        Secao secaoAtualizada = service.getBySecaoId(secaoId);
+        assertEquals(60, secaoAtualizada.getVolumeAtual());
+        assertNotNull(secaoAtualizada);
+    }
+
 }
