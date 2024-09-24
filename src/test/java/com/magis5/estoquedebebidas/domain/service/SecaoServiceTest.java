@@ -177,6 +177,7 @@ class SecaoServiceTest {
         assertEquals("secao inválida: Houve um erro em uma ou mais regras de validação", thrown.getMessage());
     }
 
+    @Order(3)
     @Test
     @Transactional
     @DisplayName("Adiciona uma bebida na seção")
@@ -227,6 +228,7 @@ class SecaoServiceTest {
         assertEquals("Nenhuma seção encontrada com o id: "+secaoId, thrown.getMessage());
     }
 
+    @Order(4)
     @Test
     @Transactional
     @DisplayName("Remove uma bebida da seção")
@@ -250,7 +252,7 @@ class SecaoServiceTest {
         MovimentoBebidasRequest request = new MovimentoBebidasRequest("Allan", TipoMovimento.SAIDA, 10.0);
 
         // Act
-        service.retirarBebida(secaoId, bebidaId, request);
+        service.retirarBebida(secaoId, bebida.getId(), request);
 
         // Assert
         Secao secaoAtualizada = service.getBySecaoId(secaoId);
