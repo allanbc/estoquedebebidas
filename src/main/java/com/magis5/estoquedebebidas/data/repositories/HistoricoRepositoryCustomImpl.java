@@ -1,6 +1,6 @@
 package com.magis5.estoquedebebidas.data.repositories;
 
-import com.magis5.estoquedebebidas.data.models.MovimentoBebidasRequest;
+import com.magis5.estoquedebebidas.adapters.models.MovimentoBebidasRequest;
 import com.magis5.estoquedebebidas.domain.entities.Bebida;
 import com.magis5.estoquedebebidas.domain.entities.Historico;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
