@@ -67,17 +67,15 @@ Foram utilizados alguns padrões de projeto para facilitar a implementação das
 - `DTO`: Data Transfer Object é um padrão de arquitetura de objetos qe agregam e encapsulam dados para transferência. Ele foi utilizado na API em alguns pontos para representar algumas informações.
 - Builder: Nos permite construir objetos complexos de forma organizada e legível, evitando a confusão causada por muitos construtores e métodos setters.
 
-- `Factory method`: Atua como uma fábrica que escolhe que escolhe qual estratégia de movimentação de bebidas deve ser usada com base no tipo de movimento. O Factory Pattern também está presente n implementação da classe **MovimentoHistoricoStrategyFactor**y. O padrão Factory é utilizado para encapsular a lógica de criação de objetos, delegando a responsabilidade de instanciar as classes corretas com base em algum critério (neste caso, o `TipoMovimento`). O Factory Pattern foi utilizado para encapsular a lógica de escolha da estratégia de movimentação aproprieada e a retorna com base no parâmetro TipoMovimento(como ENTRADA ou SAIDA). Dessa maneira, se houver novos tipos no futuro, será possível facilmente adicionar novas estratégias sem alterar o código existente, apenas registrando a nova implementação no `Map`.
+- `Factory method`: Atua como uma fábrica que escolhe qual estratégia de movimentação de bebidas deve ser usada com base no tipo de movimento. O Factory Pattern também está presente n implementação da classe **MovimentoHistoricoStrategyFactor**y. O padrão Factory é utilizado para encapsular a lógica de criação de objetos, delegando a responsabilidade de instanciar as classes corretas com base em algum critério (neste caso, o `TipoMovimento`). O Factory Pattern foi utilizado para encapsular a lógica de escolha da estratégia de movimentação aproprieada e a retorna com base no parâmetro TipoMovimento(como ENTRADA ou SAIDA). Dessa maneira, se houver novos tipos no futuro, será possível facilmente adicionar novas estratégias sem alterar o código existente, apenas registrando a nova implementação no `Map`.
 
 - `Chain of Responsibility`: Esse padrão nos permite que criemos uma cadeia de responsabilidades onde cada manipulador pode processar uma solicitação ou passar para o próximo na cadeia. Isso está implementado  nas classes `AbstractHandler ` e `ValidacaoEstoquehandler`.
 - `Strategy`: Fornece uma maneira de escolher dinamicamente entre várias implementações de uma interface de acordo com a situação. Nessa API em específico o padrão **Strategy** está sendo utilizado para a lógica de movimentação de bebidas e validações, como em `MovimentoHistoricoStrategyFactory`.
 
-#**Em Resumo:**
-**Interface** `HandlerEstoque`, `AbstractHandler`, e `ValidacaoEstoquehandler` fazem parte do padrão **Chain of Responsibility**. Eles permitem que encadeemos múltiplos manipuladores de lógica de negócio.
+## Resumo de Padrões na Implementação:
+As Interfaces `HandlerEstoque`, `AbstractHandler`, e `ValidacaoEstoquehandler` fazem parte do padrão **Chain of Responsibility**. Eles permitem que encadeemos múltiplos manipuladores de lógica de negócio.
 
 **Movimento de Bebidas e Validações (Strategy)**: O Strategy Pattern está presente na forma como escolhemos a estratégia de movimentação de bebidas (**MovimentoHistoricoStrategyFactory**) e na forma como lida com validações específicas de entrada ou saída de bebidas (**ValidacaoEstoquehandler, ValidacaoSaidaHandler**).
-
-#Resumo de Padrões na Implementação:
 
 **Chain of Responsibility**: Usado para criar uma cadeia de validações e processamento, como na AbstractHandler e seus subclasses.
 **Strategy Pattern**: Utilizado para selecionar a lógica de movimentação de bebidas e as validações de entrada ou saída.
@@ -94,9 +92,9 @@ Tendo isso em mãos, no cmd da raiz do projeto, entre os seguintes comandos:
 - `docker run -p 8080:8080 estoque-bebidas-app`-> O conteiner vai rodar numa aplicação spring boot na porta 8080:8080.
 - `docker-compose up` -> rode esse comando caso queira que suba no conteiner a aplicação junto com o banco de dados.
 
-## Perguntass Respostas
+# Perguntas e Respostas
 ## 1 - O que achou do teste? Grau de dificuldade, desafios encontrados, etc.
-Achei um grau médio,porém as regras de negócio estavam um tanto confusas em alguns pontos. Meu maior desafio foi conciliar minhas tarefas diárias de trabalho com esse desafio. Isso o tornoo, sem trocadilhos, bastante desafiador, principalmente porque tentei entregar uma API mais robusta que o normal e com um código com mais qualidade.
+Achei um grau médio,porém as regras de negócio estavam um tanto confusas em alguns pontos. Meu maior desafio foi conciliar minhas tarefas diárias de trabalho com esse desafio. Isso o tornou, sem trocadilhos, bastante desafiador, principalmente porque tentei entregar uma API mais robusta que o normal e com um código com mais qualidade.
 
 ## 2 -  Alteraria algo no teste para analisar alguma outra habilidade?
 Se houvesse tempo ágil, talvez trabalhar com estrutura de filas.

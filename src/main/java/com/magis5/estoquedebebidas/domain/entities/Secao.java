@@ -5,10 +5,14 @@ import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
+
+import java.text.DecimalFormat;
 
 @Entity
 @Getter
 @Builder
+@Setter
 public class Secao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,9 +56,9 @@ public class Secao {
         return tipoBebida.equals(TipoBebida.ALCOOLICA) ? 500.0 : 400.0;
     }
 
-    public boolean removerVolumeMaiorQueZero(String tipo, double volume) {
+    public boolean removerVolumeMaiorQueZero(String tipo, double volume, Secao secao) {
         if(volumeAtual - volume <= 0 || volume <= 0) {
-            throw new RemoverVolumeMaiorException(volume);
+            throw new RemoverVolumeMaiorException(new DecimalFormat("#,##0.0").format(volume), secao);
         } else {
             this.volumeAtual -= volume;
             return false;
@@ -63,17 +67,10 @@ public class Secao {
 
     public boolean removerVolumeMaiorQueAtual(Bebida bebida, Secao secao, double volume) {
         if (volume > volumeAtual && volume > secao.getCapacidadeMaxima()) {
-            throw new RemoverVolumeMaiorException(volume, bebida, secao);
+            throw new RemoverVolumeMaiorException(new DecimalFormat("#,##0.0").format(volume), bebida, secao);
         }
         return true;
     }
-
-    /*
-    * Todo implementar a regra "Uma seção não pode ter dois ou mais tipos diferentes de bebidas"
-     * Todo implementar a regra "Uma seção não pode receber bebidas não alcoólicas se recebeu alcoólicas no mesmo dia.
-     * Ex: Seção 2 começou o dia com 50 litros de bebidas alcoólicas que foram consumidas do estoque,
-     * só poderá receber não alcoólicas no dia seguinte."
-     */
 }
 
 

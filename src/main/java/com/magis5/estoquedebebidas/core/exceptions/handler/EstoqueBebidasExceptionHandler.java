@@ -1,7 +1,7 @@
 package com.magis5.estoquedebebidas.core.exceptions.handler;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.magis5.estoquedebebidas.data.models.ErrorResponse;
+import com.magis5.estoquedebebidas.adapters.models.ErrorResponse;
 import com.magis5.estoquedebebidas.core.exceptions.EstoqueBebidasException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
