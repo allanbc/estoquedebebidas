@@ -1,6 +1,7 @@
 package com.magis5.estoquedebebidas.adapters.controllers;
 import com.magis5.estoquedebebidas.adapters.models.MovimentoBebidasRequest;
 import com.magis5.estoquedebebidas.adapters.models.SecaoDTO;
+import com.magis5.estoquedebebidas.domain.entities.Bebida;
 import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
 import com.magis5.estoquedebebidas.application.services.TiposConsultaSecaoService;
@@ -36,6 +37,11 @@ public class SecaoController {
                 .buildAndExpand(novasecao.getId())
                 .toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Secao>> getAllSecoes() {
+        return ResponseEntity.ok(secaoService.findAll());
     }
 
     @PostMapping(value="/adicionarbebida/{secaoId}/{bebidaId}", consumes = MediaType.APPLICATION_JSON_VALUE)
