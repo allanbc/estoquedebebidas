@@ -4,6 +4,7 @@ import com.magis5.estoquedebebidas.core.exceptions.RecebeBebidaAlcoolicaExceptio
 import com.magis5.estoquedebebidas.adapters.models.MovimentoBebidasRequest;
 import com.magis5.estoquedebebidas.adapters.models.SecaoDTO;
 import com.magis5.estoquedebebidas.core.exceptions.SecaoNotFoundException;
+import com.magis5.estoquedebebidas.domain.entities.Bebida;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
 import com.magis5.estoquedebebidas.application.usecases.chains.implementations.MovimentacaoBebidas;
 import com.magis5.estoquedebebidas.application.usecases.validators.implementations.SecaoValidadorChain;
@@ -12,6 +13,8 @@ import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 import java.util.Optional;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -101,5 +104,11 @@ public class SecaoService {
 
         historicoService.atualizarHistorico(secao, bebida, request);
 
+    }
+
+    public List<Secao> findAll() {
+        return manager
+                .createQuery("SELECT s FROM Secao s", Secao.class)
+                .getResultList();
     }
 }
