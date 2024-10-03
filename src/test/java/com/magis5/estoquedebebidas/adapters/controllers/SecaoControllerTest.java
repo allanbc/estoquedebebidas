@@ -1,7 +1,6 @@
 package com.magis5.estoquedebebidas.adapters.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.magis5.estoquedebebidas.adapters.controllers.SecaoController;
 import com.magis5.estoquedebebidas.adapters.models.MovimentoBebidasRequest;
 import com.magis5.estoquedebebidas.adapters.models.SecaoDTO;
 import com.magis5.estoquedebebidas.domain.entities.Bebida;
@@ -46,7 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@ActiveProfiles("test")
+@ActiveProfiles("tests")
 class SecaoControllerTest {
 
     @Autowired
@@ -66,21 +65,24 @@ class SecaoControllerTest {
     private ObjectMapper objectMapper;
     @Captor
     private ArgumentCaptor<SecaoDTO> secaoDTOArgumentCaptor;
-
-    private SecaoController secaoController;
-
+    private Secao secao;
 
     @BeforeEach
     void setup() {
         objectMapper = new ObjectMapper();
         // Simula a busca por ID
+        secao = Secao.builder()
+                        .id(1L)
+                                .numSecao(1)
+                                        .capacidadeMaxima(300.0)
+                                                .tipoBebida(TipoBebida.ALCOOLICA)
+                                                        .volumeAtual(20.0)
+                                                                .build();
         when(secaoService.getBySecaoId(1L)).thenReturn(
-                new Secao(1L, 1, TipoBebida.ALCOOLICA, 300.0, 20.0)
+                secao
         );
 
-        secaoController = new SecaoController(secaoService, tiposConsultaSecaoService);
     }
-
 
     @Test
     @DisplayName("Test Create Secao")
@@ -90,7 +92,6 @@ class SecaoControllerTest {
 
         String payload = objectMapper.writeValueAsString(secaoDTO);
 
-        var secao = new Secao(1L, 1, TipoBebida.ALCOOLICA, 300.0, 20.0);
         // Mockar o retorno do serviço
         when(secaoService.criarSecao(any(SecaoDTO.class))).thenReturn(Secao.secaoBuilder(secao));
 

@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @Entity
 @Getter
-@Setter
 @Builder
 public class Bebida {
 

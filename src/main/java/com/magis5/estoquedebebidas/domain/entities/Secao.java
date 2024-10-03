@@ -12,7 +12,6 @@ import java.text.DecimalFormat;
 @Entity
 @Getter
 @Builder
-@Setter
 public class Secao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
