@@ -42,9 +42,6 @@ jobs:
     - name: List files
       run: ls -R
     
-    - name: Change directory to estoquedebebidas
-      run: cd estoquedebebidas
-    
     - name: Run tests with the test profile
       run: ./gradlew test
       env:
