@@ -42,8 +42,11 @@ jobs:
     - name: Print environment variables
       run: echo "SPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE"
 
+    - name: Change directory to estoquedebebidas
+      run: cd estoquedebebidas
+    
     - name: Run tests with the test profile
-      run: ./gradlew test --file ./estoquedebebidas/build.gradle
+      run: ./gradlew test
       env:
         SPRING_PROFILES_ACTIVE: tests
 
