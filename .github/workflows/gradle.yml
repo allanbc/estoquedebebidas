@@ -43,7 +43,7 @@ jobs:
       run: echo "SPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE"
 
     - name: Run tests with the test profile
-      run: ./gradlew test
+      run: ./gradlew test --file ./estoquedebebidas/build.gradle
       env:
         SPRING_PROFILES_ACTIVE: tests
 
