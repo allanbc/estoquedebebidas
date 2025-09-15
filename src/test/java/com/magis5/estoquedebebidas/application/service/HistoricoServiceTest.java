@@ -5,6 +5,7 @@ import com.magis5.estoquedebebidas.adapters.models.MovimentoBebidasRequest;
 import com.magis5.estoquedebebidas.domain.entities.Bebida;
 import com.magis5.estoquedebebidas.domain.entities.Historico;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
+import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
 import com.magis5.estoquedebebidas.domain.enums.TipoMovimento;
 import com.magis5.estoquedebebidas.domain.repositories.HistoricoRepositoryCustom;
 import com.magis5.estoquedebebidas.application.usecases.factories.MovimentoHistoricoStrategyFactory;
@@ -152,8 +153,10 @@ class HistoricoServiceTest {
         verify(historicoRepositoryCustom, times(1)).verificarSePodeCadastrarBebidaSecao(tipoBebida, secaoId);
     }
     private Historico criarHistorico(Integer secaoNum, TipoMovimento tipoMovimento) {
-        Secao secao = new Secao();
-        secao.setNumSecao(secaoNum);
+        Secao secao = Secao.builder()
+                .numSecao(secaoNum)
+                .build();
+
         Historico historico = null;
         if (tipoMovimento != null) {
             historico = Historico.builder()

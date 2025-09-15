@@ -1,0 +1,10 @@
+services:
+  app:
+    ports:
+      - "${SPRING_LOCAL_PORT}:${SPRING_DOCKER_PORT}"
+    environment:
+      SPRING_PROFILES_ACTIVE: "dev"
+
+  mysqldb:
+    ports:
+      - "${MYSQL_LOCAL_PORT}:${MYSQL_DOCKER_PORT}"

@@ -1,37 +1,13 @@
-HELP.md
+# caches e diretórios pesados
+.git
 .gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
-
-### IntelliJ IDEA ###
 .idea
-*.iws
-*.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+.vscode
+node_modules
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# ignora o build inteiro...
+build/**
 
-### VS Code ###
-.vscode/
+# ...mas REINCLUI os jars da pasta libs (estas linhas DEVEM vir depois de build/**)
+!build/libs/**
+!build/libs/*.jar
