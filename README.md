@@ -109,29 +109,11 @@ docker compose --env-file .env.dev up -d      # dev
 docker compose --env-file .env.test up -d     # test
 docker compose --env-file .env.prd up -d      # prd
 
-## PowerShell
-docker compose `
-  --env-file .env.dev `
-  -f docker-compose.yml `
-  -f docker-compose.dev.yml `
-  up -d --build
-
-## Opção 2 
-docker run --rm --name estoque-bebidas-app `
-	--network springboot-mysql-network `
-	-p 8081:8080 `
-	--env-file .env.dev `
-	estoque-bebidas-app:latest
-
-docker run --rm --name estoque-bebidas-app `
-  --network springboot-mysql-network `
-  -p 8081:8080 `
-  -e SPRING_PROFILES_ACTIVE=dev `
-  -e SPRING_DATASOURCE_URL="jdbc:mysql://mysqldb:3306/controle-estoque-db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Sao_Paulo" `
-  -e SPRING_DATASOURCE_USERNAME=root `
-  -e SPRING_DATASOURCE_PASSWORD=root `
-  estoque-bebidas-app:latest
-  
-## Tudo em uma linha
+### Tudo em uma linha
 docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml up -d --build
 
+### Removendo cache
+#versão 1 sem cache
+./gradlew clean bootJar -x test   
+docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml build --no-cache app
+docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml up -d app
