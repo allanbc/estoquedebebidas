@@ -17,6 +17,7 @@ public record HistoricoDTO(
 ) {
     public static Historico convertToDTO(Historico historico) {
         return Historico.builder()
+                .id(historico.getId())
                 .bebida(historico.getBebida())
                 .secao(historico.getSecao())
                 .volume(historico.getVolume())

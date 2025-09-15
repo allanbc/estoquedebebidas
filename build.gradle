@@ -42,3 +42,9 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+tasks.named("jar") {
+	enabled = false
+}
+tasks.named("bootJar") {
+	archiveFileName = "estoque-bebidas-app.jar"  // nome único e estável
+}

@@ -1,0 +1,14 @@
+services:
+  app:
+    # Exponha apenas a app (idealmente atrás de um reverse proxy / LB)
+    ports:
+      - "${SPRING_LOCAL_PORT}:${SPRING_DOCKER_PORT}"
+    environment:
+      SPRING_PROFILES_ACTIVE: "prd"
+    restart: unless-stopped
+
+  mysqldb:
+    # Em produção, evite mapear porta do DB para o host
+    # (acesso apenas pela rede do compose)
+    # ports: []   # opcional para deixar explícito que não expõe
+    restart: unless-stopped
