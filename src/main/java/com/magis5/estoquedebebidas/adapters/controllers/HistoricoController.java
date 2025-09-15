@@ -16,7 +16,7 @@ public class HistoricoController {
         this.historicoService = historicoService;
     }
 
-    @GetMapping("/consulta")
+    @GetMapping
     public ResponseEntity<List<Historico>> consultaHistoricoOrderBySecaoDataAsc(
             @RequestParam(defaultValue = "dataHora") String sortField,
             @RequestParam(defaultValue = "ASC") String sortDirection,

@@ -156,13 +156,15 @@ class SecaoServiceTest {
         // Arrange
         Long secaoId = 1L;
         Long bebidaId = 1L;
-
         // Criar e persistir uma seção
         SecaoDTO secaoDTO = new SecaoDTO(1, TipoBebida.ALCOOLICA, 500, 100.0);
-        Secao secao = new Secao();
-        secao.setId(secaoId);
-        secao.setVolumeAtual(secaoDTO.volume());
-        secao.setTipoBebida(secaoDTO.tipoBebida());
+
+        Secao secao = Secao.builder()
+                .id(secaoId)
+                .tipoBebida(secaoDTO.tipoBebida())
+                .volumeAtual(secaoDTO.volume())
+                .build();
+
         manager.merge(secao);
 
         // Criar e persistir uma bebida
@@ -210,10 +212,13 @@ class SecaoServiceTest {
 
         // Criar e persistir uma seção
         SecaoDTO secaoDTO = new SecaoDTO(1, TipoBebida.ALCOOLICA, 500, 70.0);
-        Secao secao = new Secao();
-        secao.setId(secaoId);
-        secao.setVolumeAtual(secaoDTO.volume());
-        secao.setTipoBebida(secaoDTO.tipoBebida());
+
+        Secao secao = Secao.builder()
+                .id(secaoId)
+                .tipoBebida(secaoDTO.tipoBebida())
+                .volumeAtual(secaoDTO.volume())
+                .build();
+
         manager.merge(secao);
 
         // Criar e persistir uma bebida
