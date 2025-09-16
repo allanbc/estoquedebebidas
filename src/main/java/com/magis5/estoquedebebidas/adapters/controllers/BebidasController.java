@@ -43,9 +43,7 @@ public class BebidasController {
                             schema = @Schema(type = "string", format = "uri")),
                     content = @Content(schema = @Schema(implementation = BebidaDTO.class))),
             @ApiResponse(responseCode = "400", description = "Requisição inválida"),
-            @ApiResponse(responseCode = "409", description = "Conflito (regra de negócio)"),
-            @ApiResponse(responseCode = "401", description = "Não autenticado"),
-            @ApiResponse(responseCode = "403", description = "Sem permissão")
+            @ApiResponse(responseCode = "409", description = "Conflito (regra de negócio)")
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Bebida> createBebidas(
