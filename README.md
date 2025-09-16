@@ -103,16 +103,19 @@ Se houvesse tempo ágil, talvez trabalhar com estrutura de filas.
 Entendo e sou totalmente favorável de sua utilização, pois além de nos ensinar a pegar o hábito de escrevê-los, nos permite mapear pequenas partes de um código uilizando os testes unitários, assim como os de integração cobrindo de ponta a ponta uma transação, desde a chamada da controller até a persistência na base de dados.
 
 
-## Comandos úteis]
+## Comandos úteis
+### Permite subir o conteiner no ambiente específico
 
-docker compose --env-file .env.dev up -d      # dev
-docker compose --env-file .env.test up -d     # test
-docker compose --env-file .env.prd up -d      # prd
+docker compose --env-file .env.dev up -d         # dev
+docker compose --env-file .env.test up -d        # test
+docker compose --env-file .env.prd up -d         # prd
 
-### Tudo em uma linha
-docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+### Executa tudo em uma linha
+Lê o enviroment, seleciona o ambiente, sobe o banco de dados e faz o build
+- [ ] docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml up -d --build
 
 ### Removendo cache
 ./gradlew clean bootJar -x test   
-docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml build --no-cache app
-docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml up -d app
+
+- [ ] docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml build --no-cache app
+- [ ] docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml up -d app
