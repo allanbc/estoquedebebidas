@@ -1,4 +1,5 @@
 package com.magis5.estoquedebebidas.adapters.controllers;
+import com.magis5.estoquedebebidas.adapters.models.ErrorResponse;
 import com.magis5.estoquedebebidas.adapters.models.MovimentoBebidasRequest;
 import com.magis5.estoquedebebidas.adapters.models.SecaoDTO;
 import com.magis5.estoquedebebidas.domain.enums.TipoBebida;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -37,6 +39,11 @@ public class SecaoController {
         this.tiposConsultaSecaoService = tiposConsultaSecaoService;
     }
 
+    public record CreatedMessage(
+            @Schema(examples = "Seção criada com sucesso")
+            String description
+    ) {}
+
     @Operation(
             operationId = "adicionarSecaoPost",
             summary = "Adiciona uma seção",
@@ -45,16 +52,37 @@ public class SecaoController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Seção criada",
-                    headers = @io.swagger.v3.oas.annotations.headers.Header(
+                    headers = { @io.swagger.v3.oas.annotations.headers.Header(
                             name = "Location", description = "URI do vínculo criado",
-                            schema = @Schema(type = "string", format = "uri")
-                    )),
-            @ApiResponse(responseCode = "204", description = "Associação já existia (idempotente)"),
-            @ApiResponse(responseCode = "404", description = "Seção ou bebida não encontrada"),
-            @ApiResponse(responseCode = "409", description = "Conflito (regra de negócio)")
+                            schema = @Schema(type = "string", format = "uri"),
+                            examples = @ExampleObject(value = "/api/secoes/15")
+                    )},
+                    content = @Content
+            ),
+            @ApiResponse(responseCode = "204", description = "Associação já existia (idempotente)",
+                    content = @Content(schema = @Schema(implementation = SecaoDTO.class),
+                            examples = @ExampleObject(name = "Exemplo", value = """
+                      {
+                        "httpStatusCode": 204,
+                        "errorCode": "secao_no_content",
+                        "message": "Seção já existia",
+                        "fields": {}
+                      }
+                      """))),
+
+            @ApiResponse(responseCode = "409", description = "Conflito (regra de negócio)",
+                    content = @Content(schema = @Schema(implementation = SecaoDTO.class),
+                            examples = @ExampleObject(name = "Exemplo", value = """
+                      {
+                        "httpStatusCode": 409,
+                        "errorCode": "secao_conflict",
+                        "message": "Conflito ao tentar adicionar seção",
+                        "fields": {}
+                      }
+                      """)))
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Secao> create(@Valid @RequestBody SecaoDTO secaoDTO) {
+    public ResponseEntity<CreatedMessage> create(@Valid @RequestBody SecaoDTO secaoDTO) {
         // Constrói a URI do recurso recém-criado
         var novasecao = secaoService.criarSecao(secaoDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -94,9 +122,36 @@ public class SecaoController {
                             name = "Location", description = "URI do vínculo criado",
                             schema = @Schema(type = "string", format = "uri")
                     )),
-            @ApiResponse(responseCode = "204", description = "Associação já existia (idempotente)"),
-            @ApiResponse(responseCode = "404", description = "Seção ou bebida não encontrada"),
-            @ApiResponse(responseCode = "409", description = "Conflito (regra de negócio)")
+            @ApiResponse(responseCode = "204", description = "Associação já existia (idempotente)",
+                    content = @Content(schema = @Schema(implementation = SecaoDTO.class),
+                            examples = @ExampleObject(name = "Exemplo", value = """
+                      {
+                        "httpStatusCode": 204,
+                        "errorCode": "secao_no_content",
+                        "message": "Seção já existia",
+                        "fields": {}
+                      }
+                      """))),
+            @ApiResponse(responseCode = "404", description = "Seção ou bebida não encontrada",
+                    content = @Content(schema = @Schema(implementation = SecaoDTO.class),
+                            examples = @ExampleObject(name = "Exemplo", value = """
+                      {
+                        "httpStatusCode": 404,
+                        "errorCode": "secao_not_found",
+                        "message": "Seção 99 não encontrada",
+                        "fields": {}
+                      }
+                      """))),
+            @ApiResponse(responseCode = "409", description = "Conflito (regra de negócio)",
+                    content = @Content(schema = @Schema(implementation = SecaoDTO.class),
+                            examples = @ExampleObject(name = "Exemplo", value = """
+                      {
+                        "httpStatusCode": 409,
+                        "errorCode": "secao_conflict",
+                        "message": "Conflito ao tentar adicionar bebida na seção 10",
+                        "fields": {}
+                      }
+                      """)))
     })
     @PostMapping(value="/{secaoId}/{bebidaId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> adicionarBebida(@PathVariable("secaoId") Long secaoId, @PathVariable("bebidaId") Long bebidaId,
@@ -115,9 +170,37 @@ public class SecaoController {
             }
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Associação removida (ou já inexistente)"),
-            @ApiResponse(responseCode = "404", description = "Seção ou bebida não encontrada"),
-            @ApiResponse(responseCode = "409", description = "Regra de negócio impede a remoção")
+            @ApiResponse(responseCode = "204", description = "Associação removida (ou já inexistente)",
+                    content = @Content(schema = @Schema(implementation = SecaoDTO.class),
+                            examples = @ExampleObject(name = "Exemplo", value = """
+                      {
+                        "httpStatusCode": 204,
+                        "errorCode": "secao_no_content",
+                        "message": "Seção já existia",
+                        "fields": {}
+                      }
+                      """))),
+            @ApiResponse(responseCode = "404", description = "Seção ou bebida não encontrada",
+                    content = @Content(schema = @Schema(implementation = SecaoDTO.class),
+                    examples = @ExampleObject(name = "Exemplo", value = """
+                      {
+                        "httpStatusCode": 404,
+                        "errorCode": "secao_not_found",
+                        "message": "Seção 99 não encontrada",
+                        "fields": {}
+                      }
+                      """)
+            )),
+            @ApiResponse(responseCode = "409", description = "Regra de negócio impede a remoção",
+                    content = @Content(schema = @Schema(implementation = SecaoDTO.class),
+                            examples = @ExampleObject(name = "Exemplo", value = """
+                      {
+                        "httpStatusCode": 409,
+                        "errorCode": "secao_conflict",
+                        "message": "Conflito ao tentar remover bebida da seção 10",
+                        "fields": {}
+                      }
+                      """)))
     })
     @DeleteMapping(value="/{secaoId}/{bebidaId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> removerBebida(@PathVariable("secaoId") Long secaoId, @PathVariable("bebidaId") Long bebidaId,
@@ -133,8 +216,28 @@ public class SecaoController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Seção encontrada",
-                    content = @Content(schema = @Schema(implementation = SecaoDTO.class))),
-            @ApiResponse(responseCode = "404", description = "Seção não encontrada")
+                    content = @Content(schema = @Schema(implementation = SecaoDTO.class),
+                            examples = @ExampleObject(name = "Exemplo", value = """
+                              {
+                                "numero": "11",
+                                "tipoBebida": "NAOLCOOLICA",
+                                "capacidadeMaxima": 100,
+                                "volume": 500
+                              }
+                              """)
+                    )),
+
+            @ApiResponse(responseCode = "404", description = "Seção não encontrada",
+                content = @Content(schema = @Schema(implementation = ErrorResponse.class),
+                    examples = @ExampleObject(name = "Exemplo", value = """
+                      {
+                        "httpStatusCode": 404,
+                        "errorCode": "secao_not_found",
+                        "message": "Seção 99 não encontrada",
+                        "fields": {}
+                      }
+                      """)
+            ))
     })
     @GetMapping(value="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Secao> getSecaoById(
@@ -159,12 +262,12 @@ public class SecaoController {
     }
 
     @Operation(
-            operationId = "secoesParaVenda",
-            summary = "Seções para venda",
-            description = "Lista seções marcadas como aptas para venda."
+            operationId = "secoesDeArmazenamento",
+            summary = "Seções de armazenamento",
+            description = "Lista seções destinadas a armazenamento."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Lista de seções",
+            @ApiResponse(responseCode = "200", description = "Lista de seções de armazenamento",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = SecaoDTO.class))))
     })
     @GetMapping("/secoes-de-armazenamento")
@@ -173,12 +276,12 @@ public class SecaoController {
     }
 
     @Operation(
-            operationId = "secoesDeArmazenamento",
-            summary = "Seções de armazenamento",
-            description = "Lista seções destinadas a armazenamento."
+            operationId = "secoesParaVenda",
+            summary = "Seções para venda",
+            description = "Lista seções marcadas como aptas para venda."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Lista de seções",
+            @ApiResponse(responseCode = "200", description = "Lista de seções para venda",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = SecaoDTO.class))))
     })
     @GetMapping("/secoes-para-venda")

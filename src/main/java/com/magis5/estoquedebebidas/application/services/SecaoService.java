@@ -1,10 +1,8 @@
 package com.magis5.estoquedebebidas.application.services;
 
-import com.magis5.estoquedebebidas.core.exceptions.RecebeBebidaAlcoolicaException;
 import com.magis5.estoquedebebidas.adapters.models.MovimentoBebidasRequest;
 import com.magis5.estoquedebebidas.adapters.models.SecaoDTO;
 import com.magis5.estoquedebebidas.core.exceptions.SecaoNotFoundException;
-import com.magis5.estoquedebebidas.domain.entities.Bebida;
 import com.magis5.estoquedebebidas.domain.entities.Secao;
 import com.magis5.estoquedebebidas.application.usecases.chains.implementations.MovimentacaoBebidas;
 import com.magis5.estoquedebebidas.application.usecases.validators.implementations.SecaoValidadorChain;
@@ -53,12 +51,7 @@ public class SecaoService {
             Se um objeto (validador) não conseguir lidar com a entrada (neste caso, o SecaoDTO),
             ele passa a responsabilidade para o próximo objeto da cadeia.
          */
-//        SecaoValidadorChain validatorChain = new SecaoValidadorChain();
-//        try {
             validatorChain.validate(secaoDTO);
-//        } catch (SecaoInvalidaException e) {
-//            throw  new SecaoInvalidaException("Houve um erro em uma ou mais regras de validação");
-//        }
 
         var secao = Secao.builder()
                 .numSecao(secaoDTO.numero())
