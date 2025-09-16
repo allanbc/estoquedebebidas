@@ -1,6 +1,7 @@
 package com.magis5.estoquedebebidas.adapters.controllers;
 
 import com.magis5.estoquedebebidas.adapters.models.BebidaDTO;
+import com.magis5.estoquedebebidas.adapters.models.ErrorResponse;
 import com.magis5.estoquedebebidas.adapters.models.SecaoDTO;
 import com.magis5.estoquedebebidas.domain.entities.Bebida;
 import com.magis5.estoquedebebidas.application.services.BebidaService;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -42,8 +44,29 @@ public class BebidasController {
                     headers = @Header(name = "Location", description = "URI do recurso criado",
                             schema = @Schema(type = "string", format = "uri")),
                     content = @Content(schema = @Schema(implementation = BebidaDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
-            @ApiResponse(responseCode = "409", description = "Conflito (regra de negócio)")
+            @ApiResponse(responseCode = "400", description = "Requisição inválida",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(name = "Exemplo", value = """
+                      {
+                        "httpStatusCode": 400,
+                        "errorCode": "bad_request",
+                        "message": "Payload inválido",
+                        "fields": {
+                          "capacidadeMaxima": "capacidadeMaxima deve ser maior que zero",
+                          "tipoBebida": "tipoBebida deve ser um dos valores: [NÃO_ALCOOLICA, ALCOOLICA]"
+                        }
+                      }
+                      """))),
+            @ApiResponse(responseCode = "409", description = "Conflito (regra de negócio)",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(name = "Exemplo", value = """
+                      {
+                        "httpStatusCode": 409,
+                        "errorCode": "bebida_already_exists",
+                        "message": "Bebida com nome 'Coca-Cola' já existe",
+                        "fields": {}
+                      }
+                      """)))
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Bebida> createBebidas(
@@ -86,7 +109,16 @@ public class BebidasController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Bebida encontrada",
                     content = @Content(schema = @Schema(implementation = BebidaDTO.class))),
-            @ApiResponse(responseCode = "404", description = "Bebida não encontrada")
+            @ApiResponse(responseCode = "404", description = "Bebida não encontrada",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(name = "Exemplo", value = """
+                      {
+                        "httpStatusCode": 404,
+                        "errorCode": "bebida_not_found",
+                        "message": "Bebida 10 não encontrada",
+                        "fields": {}
+                      }
+                      """)))
     })
     @GetMapping("/{id}")
     public ResponseEntity<Bebida> getBebidasById(
@@ -104,7 +136,16 @@ public class BebidasController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Lista de seções",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = SecaoDTO.class)))),
-            @ApiResponse(responseCode = "404", description = "Recurso não encontrado")
+            @ApiResponse(responseCode = "404", description = "Recurso não encontrado",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(name = "Exemplo", value = """
+                      {
+                        "httpStatusCode": 404,
+                        "errorCode": "secao_not_found",
+                        "message": "Seção 10 não encontrada",
+                        "fields": {}
+                      }
+                      """)))
     })
     @GetMapping("/{secaoId}/secoes")
     public ResponseEntity<List<Bebida>> listarBebidas(
