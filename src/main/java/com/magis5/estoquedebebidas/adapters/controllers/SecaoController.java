@@ -35,6 +35,25 @@ public class SecaoController {
         this.tiposConsultaSecaoService = tiposConsultaSecaoService;
     }
 
+    @Operation(
+            operationId = "adicionarSecaoPost",
+            summary = "Adiciona uma seção",
+            description = "Cria uma seção {secaoId}. "
+                    + "Cria o recurso Seção no catálogo e retorna 201 se criado."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Seção criada",
+                    headers = @io.swagger.v3.oas.annotations.headers.Header(
+                            name = "Location", description = "URI do vínculo criado",
+                            schema = @Schema(type = "string", format = "uri")
+                    )),
+            @ApiResponse(responseCode = "204", description = "Associação já existia (idempotente)"),
+            @ApiResponse(responseCode = "404", description = "Seção ou bebida não encontrada"),
+            @ApiResponse(responseCode = "409", description = "Conflito (regra de negócio)"),
+            @ApiResponse(responseCode = "412", description = "Falha de pré-condição (If-Match/ETag)"),
+            @ApiResponse(responseCode = "401", description = "Não autenticado"),
+            @ApiResponse(responseCode = "403", description = "Sem permissão")
+    })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Secao> create(@Valid @RequestBody SecaoDTO secaoDTO) {
         // Constrói a URI do recurso recém-criado
@@ -52,7 +71,7 @@ public class SecaoController {
     }
 
     @Operation(
-            operationId = "adicionarBebidaSecaoPut",
+            operationId = "adicionarBebidaSecaoPost",
             summary = "Adiciona bebida a uma seção",
             description = "Cria o vínculo entre a seção {secaoId} e a bebida {bebidaId}. "
                     + "Não cria o recurso Bebida no catálogo. Idempotente: retorna 201 se criado, 204 se já existia.",
