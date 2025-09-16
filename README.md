@@ -113,7 +113,6 @@ docker compose --env-file .env.prd up -d      # prd
 docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml up -d --build
 
 ### Removendo cache
-#versão 1 sem cache
 ./gradlew clean bootJar -x test   
 docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml build --no-cache app
 docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml up -d app
