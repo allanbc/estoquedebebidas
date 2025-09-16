@@ -92,17 +92,6 @@ Tendo isso em mãos, no cmd da raiz do projeto, entre os seguintes comandos:
 - `docker run -p 8080:8080 estoque-bebidas-app`-> O conteiner vai rodar numa aplicação spring boot na porta 8080:8080.
 - `docker-compose up` -> rode esse comando caso queira que suba no conteiner a aplicação junto com o banco de dados.
 
-# Perguntas e Respostas
-## 1 - O que achou do teste? Grau de dificuldade, desafios encontrados, etc.
-Achei um grau médio,porém as regras de negócio estavam um tanto confusas em alguns pontos. Meu maior desafio foi conciliar minhas tarefas diárias de trabalho com esse desafio. Isso o tornou, sem trocadilhos, bastante desafiador, principalmente porque tentei entregar uma API mais robusta que o normal e com um código com mais qualidade.
-
-## 2 -  Alteraria algo no teste para analisar alguma outra habilidade?
-Se houvesse tempo ágil, talvez trabalhar com estrutura de filas.
-
-## 3 - Entende que testes unitários são necessários para garantia da qualidade do código entregue?
-Entendo e sou totalmente favorável de sua utilização, pois além de nos ensinar a pegar o hábito de escrevê-los, nos permite mapear pequenas partes de um código uilizando os testes unitários, assim como os de integração cobrindo de ponta a ponta uma transação, desde a chamada da controller até a persistência na base de dados.
-
-
 ## Comandos úteis
 ### Permite subir o conteiner no ambiente específico
 
@@ -111,7 +100,7 @@ docker compose --env-file .env.test up -d        # test
 docker compose --env-file .env.prd up -d         # prd
 
 ### Executa tudo em uma linha
-Lê o enviroment, seleciona o ambiente, sobe o banco de dados e faz o build
+Lê o enviroment, seleciona o ambiente, sobe o banco de dados e faz o build.
 - [ ] docker compose --env-file .env.dev -f docker-compose.yml -f docker-compose.dev.yml up -d --build
 
 ### Removendo cache
