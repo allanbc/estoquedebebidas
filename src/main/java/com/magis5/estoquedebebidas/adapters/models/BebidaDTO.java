@@ -23,9 +23,9 @@ public record BebidaDTO(
         @Schema(description = "ID da seção", example = "1")
         Long secaoId
 ) {
-    public BebidaDTO(BebidaDTO bebidaDTO) {
-        this(bebidaDTO.nome(), bebidaDTO.tipoBebida(), bebidaDTO.secaoId);
-    }
+//    public BebidaDTO(BebidaDTO bebidaDTO) {
+//        this(bebidaDTO.nome(), bebidaDTO.tipoBebida(), bebidaDTO.secaoId);
+//    }
     public Bebida toDtoBebida(Function<Long, Secao> buscaSecao) {
         Secao secao = buscaSecao.apply(secaoId);
         Assert.notNull(secao, String.format("Você esta querendo cadastrar uma bebida para uma seção que nao existe no banco: secaoId: %s ", secaoId));

@@ -84,12 +84,8 @@ public class SecaoController {
             description = "Cria o vínculo entre a seção {secaoId} e a bebida {bebidaId}. "
                     + "Não cria o recurso Bebida no catálogo. Idempotente: retorna 201 se criado, 204 se já existia.",
             parameters = {
-                    @Parameter(name = "secaoId", in = ParameterIn.PATH, required = true, description = "ID da seção", example = "10"),
-                    @Parameter(name = "bebidaId", in = ParameterIn.PATH, required = true, description = "ID da bebida", example = "42"),
-                    @Parameter(name = "If-Match", in = ParameterIn.HEADER, required = false,
-                            description = "ETag da seção para controle de concorrência (412 se não bater)"),
-                    @Parameter(name = "X-Correlation-Id", in = ParameterIn.HEADER, required = false,
-                            description = "ID de correlação para rastreabilidade")
+                    @Parameter(name = "secaoId", in = ParameterIn.PATH, required = true, description = "ID da seção", example = "10")
+
             }
     )
     @ApiResponses({
@@ -116,10 +112,6 @@ public class SecaoController {
             parameters = {
                     @Parameter(name = "secaoId", in = ParameterIn.PATH, required = true, description = "ID da seção", example = "10"),
                     @Parameter(name = "bebidaId", in = ParameterIn.PATH, required = true, description = "ID da bebida", example = "42"),
-                    @Parameter(name = "If-Match", in = ParameterIn.HEADER, required = false,
-                            description = "ETag da seção para controle de concorrência (retorna 412 se não bater)"),
-                    @Parameter(name = "X-Correlation-Id", in = ParameterIn.HEADER, required = false,
-                            description = "ID de correlação para rastreabilidade")
             }
     )
     @ApiResponses({
