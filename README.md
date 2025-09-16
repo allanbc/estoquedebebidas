@@ -3,7 +3,7 @@
 
 
 # Descrição
-A motivação de criação dessa API veio da necessidade e observação em vários depósitos de bebidas em que a gestão do controle de estoque é feito de maneira manual, gerando uma sério de falhas operacionais, ocasionando perdas financeiras e muito retrabalho.
+A motivação de criação dessa API veio da necessidade e observação em vários depósitos de bebidas em que a gestão do controle de estoque é feito de maneira manual, gerando uma séria de falhas operacionais, ocasionando perdas financeiras e muito retrabalho.
 
 # Funcionalidades
 
